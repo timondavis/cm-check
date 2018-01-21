@@ -58,5 +58,5 @@ export declare class DieBag {
      */
     protected addNewDieIndex(sides: number): void;
     private rollCollection();
-    private tabulateCollectionRoll();
+    private getTotal();
 }

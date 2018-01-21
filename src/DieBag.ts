@@ -51,7 +51,7 @@ export class DieBag {
 
         this.rollResults = {};
         this.rollCollection();
-        this.tabulateCollectionRoll();
+        this.rollResults['total'] = this.getTotal();
 
         return this.rollResults;
     }
@@ -110,7 +110,7 @@ export class DieBag {
         });
     }
 
-    private tabulateCollectionRoll() {
+    private getTotal() {
         let self = this;
 
         let total = 0;
@@ -118,6 +118,6 @@ export class DieBag {
 
             total += self.rollResults[groupIndex];
         });
-        self.rollResults['total'] = total;
+        return total;
     }
 }

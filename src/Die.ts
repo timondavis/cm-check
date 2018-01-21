@@ -3,6 +3,7 @@ const d: any = require( 'dice-bag' );
 export class Die {
 
     protected value: number = 1;
+    protected locked: boolean = false;
 
     public constructor( public sides: number ) {
 
@@ -11,7 +12,12 @@ export class Die {
 
     public roll() {
 
-        return this.value = d( 1, this.sides );
+        if ( ! this.isLocked() ) {
+
+            return this.value = d( 1, this.sides );
+        }
+
+        return this.value;
     }
 
     public getValue() {
@@ -24,5 +30,14 @@ export class Die {
         if ( this.value > 0 && this.value <= this.sides ) {
             this.value = newValue;
         }
+    }
+
+    public setLock( locked : boolean = true ) {
+
+        this.locked = locked;
+    }
+
+    public isLocked() : boolean {
+        return this.locked;
     }
 }
