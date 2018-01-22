@@ -19,6 +19,11 @@ export declare class CheckExecutor extends EventEmitter {
      * @returns {Check}
      */
     execute(check: Check): boolean;
+    /**
+     * Execute a check passed in
+     *
+     * @param {Check} check
+     */
     private doCheck(check);
     private processTargetModifiers(check, phase);
     private processResultModifiers(check, phase);

@@ -64,6 +64,11 @@ export class CheckExecutor extends EventEmitter {
         return check.isPass();
     }
 
+    /**
+     * Execute a check passed in
+     *
+     * @param {Check} check
+     */
     private doCheck( check : Check ) {
 
         check.check();

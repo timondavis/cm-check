@@ -104,45 +104,6 @@ export class DieBag {
         return this;
     }
 
-    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
-    private strictRemoveBag( bag: DieBag ) {
-        let self = this;
-        let guestDieIndex = 0;
-        let selfDieIndex = 0;
-
-        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
-
-            for ( guestDieIndex = 0 ; guestDieIndex < bag.dieMap[groupIndex].length ; guestDieIndex++ ) {
-
-                let value = bag.dieMap[groupIndex][guestDieIndex].getValue();
-
-                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; selfDieIndex++ ) {
-
-                    if ( self.dieMap.hasOwnProperty( groupIndex ) &&
-                         value === self.dieMap[groupIndex][selfDieIndex].getValue() &&
-                         ! self.dieMap[groupIndex][selfDieIndex].isLocked() ) {
-
-                        self.dieMap[groupIndex].splice( selfDieIndex, 1 );
-                        break;
-                    }
-                }
-            }
-        });
-    }
-
-    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
-    private looseRemoveBag( bag: DieBag ) {
-
-        let self = this;
-
-        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
-
-               let groupSize = bag.dieMap[groupIndex].length;
-
-               self.remove( groupSize, Number(groupIndex) );
-        });
-
-    }
 
 
     /**
@@ -228,7 +189,7 @@ export class DieBag {
 
                 let dieMapGroup = self.dieMap[groupName];
 
-                self.rollResults[groupName] += dieMapGroup[dieIndex].roll();
+                self.rollResults[groupName] += dieMapGroup[dieIndex].roll().getValue();
             })
         });
     }
@@ -251,5 +212,43 @@ export class DieBag {
         });
     }
 
+    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
+    private strictRemoveBag( bag: DieBag ) {
+        let self = this;
+        let guestDieIndex = 0;
+        let selfDieIndex = 0;
 
+        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+
+            for ( guestDieIndex = 0 ; guestDieIndex < bag.dieMap[groupIndex].length ; guestDieIndex++ ) {
+
+                let value = bag.dieMap[groupIndex][guestDieIndex].getValue();
+
+                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; selfDieIndex++ ) {
+
+                    if ( self.dieMap.hasOwnProperty( groupIndex ) &&
+                        value === self.dieMap[groupIndex][selfDieIndex].getValue() &&
+                        ! self.dieMap[groupIndex][selfDieIndex].isLocked() ) {
+
+                        self.dieMap[groupIndex].splice( selfDieIndex, 1 );
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
+    private looseRemoveBag( bag: DieBag ) {
+
+        let self = this;
+
+        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+
+            let groupSize = bag.dieMap[groupIndex].length;
+
+            self.remove( groupSize, Number(groupIndex) );
+        });
+
+    }
 }

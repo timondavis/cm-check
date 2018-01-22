@@ -7,6 +7,12 @@ export class DieModifierFactory extends ModifierFactory {
 
     private dieBag: DieBag = new DieBag();
 
+    /**
+     * Create a new DieModifier instance
+     * @param {string} name
+     * @param {{[p: string]: string}} args
+     * @returns {Modifier}
+     */
     create( name: string, args: { [key: string]: string } = {} ): Modifier {
 
         let clonedDieBag = this.cloneDieBag( this.dieBag );
