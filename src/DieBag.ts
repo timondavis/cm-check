@@ -10,9 +10,11 @@ export class DieBag {
      *
      * @param {number} count
      * @param {number} sides
-     * @param {number} value (optional )
+     * @param {number} value (optional)
+     *
+     * @return {DieBag}
      */
-    public add( count: number , sides: number, value: number = -1 ) {
+    public add( count: number , sides: number, value: number = -1 ) : DieBag {
 
         if ( ! this.isDieIndexExists( sides ) ) { this.addNewDieIndex( sides ) }
 
@@ -27,13 +29,17 @@ export class DieBag {
 
             this.dieMap[sides].push( die );
         }
+
+        return this;
     }
 
     /**
      * Add the contents of a die bag to this bag
      * @param {DieBag} bag
+     *
+     * @return {DieBag}
      */
-    public addBag( bag : DieBag ) {
+    public addBag( bag : DieBag ) : DieBag {
 
         let self = this;
         let dieIndex = 0;
@@ -47,6 +53,8 @@ export class DieBag {
                 self.add( 1, Number( groupIndex ), newDie.getValue() );
             }
         });
+
+        return this;
     }
 
     /**
@@ -54,18 +62,23 @@ export class DieBag {
      *
      * @param {number} count
      * @param {number} sides
+     *
+     * @return {DieBag}
      */
-    public remove ( count: number, sides: number ) {
+    public remove ( count: number, sides: number ) : DieBag {
 
-        if ( ! this.isDieIndexExists( sides ) ) { return; }
+        if ( ! this.isDieIndexExists( sides ) ) { return this; }
 
         let remainingDie: number = this.dieMap[ String( sides ) ].length;
 
-        while ( remainingDie > 0 ) {
+        while ( remainingDie > 0 && count > 0 ) {
 
             this.dieMap[ String( sides )].pop();
             remainingDie = this.dieMap[ String( sides ) ].length;
+            count--;
         }
+
+        return this;
     }
 
     /**
@@ -76,8 +89,10 @@ export class DieBag {
      *
      * @param {DieBag} bag
      * @param {boolean} strictRemove
+     *
+     * @return {DieBag}
      */
-    public removeBag( bag : DieBag, strictRemove: boolean ) {
+    public removeBag( bag : DieBag, strictRemove: boolean ) : DieBag {
 
         if ( strictRemove ) {
             this.strictRemoveBag( bag );
@@ -85,6 +100,8 @@ export class DieBag {
         else {
             this.looseRemoveBag( bag );
         }
+
+        return this;
     }
 
     // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY

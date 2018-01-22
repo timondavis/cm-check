@@ -4,7 +4,7 @@ import { ResultModifier } from "./ResultModifier";
 
 export class ResultModifierFactory extends ModifierFactory {
 
-    create( name: string, args: { key: string[]; value: string } ): Modifier {
+    create( name: string, args: { [key: string] : string } = {} ): Modifier {
 
         return new ResultModifier( name, (args.hasOwnProperty( 'value' )) ? Number( args['value'] ) : 0 );
     }

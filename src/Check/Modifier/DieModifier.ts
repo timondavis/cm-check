@@ -11,4 +11,8 @@ export class DieModifier extends Modifier {
 
         super( name, -1 );
     }
+
+    public getDieBag(): DieBag {
+        return this.dieBag;
+    }
 }

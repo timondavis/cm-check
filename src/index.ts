@@ -1,16 +1,21 @@
 import { D20AttributeCheck } from './Check/D20AttributeCheck'
 import { CheckExecutor } from "./Check/CheckExecutor";
-import { DieBag } from './DieBag';
+import { DieModifierFactory } from "./Check/Modifier/DieModifierFactory";
 import { DieModifier } from "./Check/Modifier/DieModifier";
+import { DieBag } from "./DieBag";
 
 let check = new D20AttributeCheck( 10, 15 );
-let newDie = new DieBag();
-newDie.add( 4, 6 );
-check.setAttribute( 'Strength' );
-check.addDieModifier( new DieModifier( 'test', newDie, 'before', false, false ) );
-check.addDieModifier( new DieModifier( 'un-test', newDie, 'after', true, true ) );
-
+let DMF = new DieModifierFactory();
 let checker = CheckExecutor.getInstance();
+
+DMF.setDefaultDieBag( new DieBag().add( 8, 4 ) );
+
+let addDieModifier = <DieModifier> DMF.create( 'assist' );
+let removeDieModifier = <DieModifier> DMF.create( 'un-assist', { 'remove': 'true', 'phase': 'after' } );
+removeDieModifier.getDieBag().remove( 4, 4 );
+
+check.addDieModifier( addDieModifier );
+check.addDieModifier( removeDieModifier );
 
 checker.execute( check );
 

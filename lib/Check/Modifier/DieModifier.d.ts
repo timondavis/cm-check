@@ -7,4 +7,5 @@ export declare class DieModifier extends Modifier {
     remove: boolean;
     strictRemove: boolean;
     constructor(name: string, dieBag: DieBag, phase: string, remove: boolean, strictRemove: boolean);
+    getDieBag(): DieBag;
 }

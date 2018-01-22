@@ -11,21 +11,27 @@ export declare class DieBag {
      *
      * @param {number} count
      * @param {number} sides
-     * @param {number} value (optional )
+     * @param {number} value (optional)
+     *
+     * @return {DieBag}
      */
-    add(count: number, sides: number, value?: number): void;
+    add(count: number, sides: number, value?: number): DieBag;
     /**
      * Add the contents of a die bag to this bag
      * @param {DieBag} bag
+     *
+     * @return {DieBag}
      */
-    addBag(bag: DieBag): void;
+    addBag(bag: DieBag): DieBag;
     /**
      * Removed die from the bag. Translates to the famous xdy pattern  (i.e. 2d6 == 2 six sided die)
      *
      * @param {number} count
      * @param {number} sides
+     *
+     * @return {DieBag}
      */
-    remove(count: number, sides: number): void;
+    remove(count: number, sides: number): DieBag;
     /**
      * Remove die from the bag based on the contents of the given bag.
      * If strictRemove is enabled, only die matching the provided die types and values will be removed.
@@ -34,8 +40,10 @@ export declare class DieBag {
      *
      * @param {DieBag} bag
      * @param {boolean} strictRemove
+     *
+     * @return {DieBag}
      */
-    removeBag(bag: DieBag, strictRemove: boolean): void;
+    removeBag(bag: DieBag, strictRemove: boolean): DieBag;
     private strictRemoveBag(bag);
     private looseRemoveBag(bag);
     /**
