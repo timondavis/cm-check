@@ -2,10 +2,6 @@ import { DieBag } from "./DieBag";
 export declare abstract class Check {
     protected attributeValue: number;
     protected target: number;
-    protected attributeModifiers: {
-        name: string;
-        value: number;
-    }[];
     protected targetModifiers: {
         name: string;
         value: number;
@@ -17,7 +13,11 @@ export declare abstract class Check {
     protected dieModifiers: {
         name: string;
         dieBag: DieBag;
+        phase: string;
+        remove: boolean;
+        strictRemove: boolean;
     }[];
+    protected rawResult: number;
     protected result: number;
     protected dieBag: DieBag;
     /**
@@ -27,10 +27,6 @@ export declare abstract class Check {
      * @param {number} target
      */
     constructor(attributeValue: number, target: number);
-    addAttributeModifier(modifier: {
-        name: string;
-        value: number;
-    }): void;
     addTargetModifier(modifier: {
         name: string;
         value: number;
@@ -42,11 +38,10 @@ export declare abstract class Check {
     addDieModifier(modifier: {
         name: string;
         dieBag: DieBag;
+        phase: string;
+        remove: boolean;
+        strictRemove: boolean;
     }): void;
-    getAttributeModifiers(): {
-        name: string;
-        value: number;
-    }[];
     getTargetModifiers(): {
         name: string;
         value: number;
@@ -58,17 +53,26 @@ export declare abstract class Check {
     getDieModifiers(): {
         name: string;
         dieBag: DieBag;
+        phase: string;
+        remove: boolean;
+        strictRemove: boolean;
     }[];
     isPass(): boolean;
     setTarget(target: number): void;
     getTarget(): number;
     setResult(result: number): void;
     getResult(): number;
+    getRawRollResult(): number;
     check(): void;
     getDieBag(): DieBag;
+    /**
+     * Get a report on the status of the check
+     * @param {boolean} getReportAsString
+     *
+     * @returns {string | {{isPass: boolean; target: number; result: number}}
+     */
+    report(getReportAsString: boolean): any;
     abstract getType(): string;
-    protected abstract translateAttributeValue(value: number, callback: {
-        (value: number): number;
-    }): number;
+    protected static translateAttributeValue(value: number): number;
     protected abstract setBaseDieBag(): void;
 }

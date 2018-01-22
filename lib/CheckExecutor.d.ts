@@ -2,24 +2,26 @@
 import { EventEmitter } from 'events';
 import { Check } from "./Check";
 export declare class CheckExecutor extends EventEmitter {
-    private instance;
+    private static instance;
+    private isExecutingHook;
     /**
      * Get the global instance of the Check Machine
-     * @returns {CheckMachine}
+     * @returns {CheckExecutor}
      */
-    getInstance(): CheckExecutor;
+    static getInstance(): CheckExecutor;
     /**
      * Execute a check
      *
+     * @TODO THREAD LOCKING IS VERY RUDIMENTARY.  IMPROVE
      * @param {Check} check
      * @param entity
      * @param {number} target
      * @returns {Check}
      */
-    execute(check: Check, target: number, entity?: any): boolean;
-    private static doCheck(check);
-    private static processTargetModifiers(check);
-    private static processResultModifiers(check);
-    private static processDieModifiers(check);
+    execute(check: Check): boolean;
+    private doCheck(check);
+    private processTargetModifiers(check, phase);
+    private processResultModifiers(check, phase);
+    private processDieModifiers(check, phase);
     private constructor();
 }

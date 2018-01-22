@@ -10,15 +10,43 @@ export class DieBag {
      *
      * @param {number} count
      * @param {number} sides
+     * @param {number} value (optional )
      */
-    public add( count: number , sides: number ) {
+    public add( count: number , sides: number, value: number = -1 ) {
 
         if ( ! this.isDieIndexExists( sides ) ) { this.addNewDieIndex( sides ) }
 
         for ( let index = 0 ; index < count ; index++ ) {
 
-            this.dieMap[sides].push( new Die( sides ) );
+            let die = new Die( sides );
+            die.roll();
+
+            if ( value >= 0 ) {
+                die.setValue( value );
+            }
+
+            this.dieMap[sides].push( die );
         }
+    }
+
+    /**
+     * Add the contents of a die bag to this bag
+     * @param {DieBag} bag
+     */
+    public addBag( bag : DieBag ) {
+
+        let self = this;
+        let dieIndex = 0;
+
+        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+
+            for ( dieIndex = 0 ; dieIndex < bag.dieMap[groupIndex].length ; dieIndex++ ) {
+
+                let newDie = bag.dieMap[groupIndex][dieIndex];
+
+                self.add( 1, Number( groupIndex ), newDie.getValue() );
+            }
+        });
     }
 
     /**
@@ -31,14 +59,74 @@ export class DieBag {
 
         if ( ! this.isDieIndexExists( sides ) ) { return; }
 
-        let requestedIndex: number = sides;
         let remainingDie: number = this.dieMap[ String( sides ) ].length;
 
-        while ( requestedIndex > 0 && remainingDie > 0 ) {
+        while ( remainingDie > 0 ) {
 
-            this.dieMap[ sides.toPrecision( 0 ) ].pop();
+            this.dieMap[ String( sides )].pop();
+            remainingDie = this.dieMap[ String( sides ) ].length;
         }
     }
+
+    /**
+     * Remove die from the bag based on the contents of the given bag.
+     * If strictRemove is enabled, only die matching the provided die types and values will be removed.
+     * If off, it will simply remove the first available die which matches type, disregarding value.
+     * If a die cannot be removed because it is locked or does not exist, the removal of that type will stop.
+     *
+     * @param {DieBag} bag
+     * @param {boolean} strictRemove
+     */
+    public removeBag( bag : DieBag, strictRemove: boolean ) {
+
+        if ( strictRemove ) {
+            this.strictRemoveBag( bag );
+        }
+        else {
+            this.looseRemoveBag( bag );
+        }
+    }
+
+    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
+    private strictRemoveBag( bag: DieBag ) {
+        let self = this;
+        let guestDieIndex = 0;
+        let selfDieIndex = 0;
+
+        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+
+            for ( guestDieIndex = 0 ; guestDieIndex < bag.dieMap[groupIndex].length ; guestDieIndex++ ) {
+
+                let value = bag.dieMap[groupIndex][guestDieIndex].getValue();
+
+                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; guestDieIndex++ ) {
+
+                    if ( self.dieMap.hasOwnProperty( groupIndex ) &&
+                         value === self.dieMap[groupIndex][selfDieIndex].getValue() &&
+                         ! self.dieMap[groupIndex][selfDieIndex].isLocked() ) {
+
+                        self.dieMap[groupIndex].splice( selfDieIndex, 1 );
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    // @TODO, OPTIMIZE, THIS IS A PROTYPE IMPLEMENTATION ONLY
+    private looseRemoveBag( bag: DieBag ) {
+
+        let self = this;
+
+        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+
+               let groupSize = bag.dieMap[groupIndex].length;
+
+               self.remove( groupSize, Number(groupIndex) );
+        });
+
+    }
+
 
     /**
      * Roll 'dem laughing bones...
@@ -51,7 +139,6 @@ export class DieBag {
 
         this.rollResults = {};
         this.rollCollection();
-        this.rollResults['total'] = this.getTotal();
 
         return this.rollResults;
     }
@@ -93,6 +180,25 @@ export class DieBag {
         this.dieMap[ String( sides )] = [];
     }
 
+
+    /**
+     * Get the total value of the dice in the die bag
+     *
+     * @returns {number}
+     */
+    public getTotal() {
+        let self = this;
+        let total = 0;
+
+        this.refreshDieResults();
+
+        Object.keys( self.rollResults ).forEach( function( groupIndex ) {
+
+            total += self.rollResults[groupIndex];
+        });
+        return total;
+    }
+
     private rollCollection() {
 
         let self = this;
@@ -110,14 +216,23 @@ export class DieBag {
         });
     }
 
-    private getTotal() {
+    // TODO IMPLEMENT!  IF SEARCH IS A THING WE SUPPORT, THIS MUST BE IN PLACE
+    private refreshDieResults() {
+
         let self = this;
 
-        let total = 0;
-        Object.keys( self.rollResults ).forEach( function( groupIndex ) {
+        Object.keys( self.dieMap ).forEach( function( groupName: string ) {
 
-            total += self.rollResults[groupIndex];
+            self.rollResults[groupName] = 0;
+
+            Object.keys( self.dieMap[groupName] ).forEach( function( dieIndexString: string, dieIndex: number) {
+
+                let dieMapGroup = self.dieMap[groupName];
+
+                self.rollResults[groupName] += dieMapGroup[dieIndex].getValue();
+            })
         });
-        return total;
     }
+
+
 }

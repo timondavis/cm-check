@@ -11,8 +11,14 @@ export declare class DieBag {
      *
      * @param {number} count
      * @param {number} sides
+     * @param {number} value (optional )
      */
-    add(count: number, sides: number): void;
+    add(count: number, sides: number, value?: number): void;
+    /**
+     * Add the contents of a die bag to this bag
+     * @param {DieBag} bag
+     */
+    addBag(bag: DieBag): void;
     /**
      * Removed die from the bag. Translates to the famous xdy pattern  (i.e. 2d6 == 2 six sided die)
      *
@@ -20,6 +26,18 @@ export declare class DieBag {
      * @param {number} sides
      */
     remove(count: number, sides: number): void;
+    /**
+     * Remove die from the bag based on the contents of the given bag.
+     * If strictRemove is enabled, only die matching the provided die types and values will be removed.
+     * If off, it will simply remove the first available die which matches type, disregarding value.
+     * If a die cannot be removed because it is locked or does not exist, the removal of that type will stop.
+     *
+     * @param {DieBag} bag
+     * @param {boolean} strictRemove
+     */
+    removeBag(bag: DieBag, strictRemove: boolean): void;
+    private strictRemoveBag(bag);
+    private looseRemoveBag(bag);
     /**
      * Roll 'dem laughing bones...
      *
@@ -57,6 +75,12 @@ export declare class DieBag {
      * @param {number} sides
      */
     protected addNewDieIndex(sides: number): void;
+    /**
+     * Get the total value of the dice in the die bag
+     *
+     * @returns {number}
+     */
+    getTotal(): number;
     private rollCollection();
-    private getTotal();
+    private refreshDieResults();
 }

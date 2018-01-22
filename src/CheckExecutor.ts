@@ -3,55 +3,73 @@ import { Check } from "./Check";
 
 export class CheckExecutor extends EventEmitter {
 
-    private instance : CheckExecutor;
+    private static instance : CheckExecutor = new CheckExecutor();
+    private  isExecutingHook : boolean = false;
 
     /**
      * Get the global instance of the Check Machine
-     * @returns {CheckMachine}
+     * @returns {CheckExecutor}
      */
-    public getInstance() : CheckExecutor {
+    public static getInstance() : CheckExecutor {
 
-        if ( this.instance === null ) {
-            this.instance = new CheckExecutor();
-        }
-
-        return this.instance;
+        return CheckExecutor.instance;
     }
 
     /**
      * Execute a check
      *
+     * @TODO THREAD LOCKING IS VERY RUDIMENTARY.  IMPROVE
      * @param {Check} check
      * @param entity
      * @param {number} target
      * @returns {Check}
      */
-    public execute( check : Check, target : number, entity : any = null ) : boolean {
+    public execute( check : Check ) : boolean {
 
-        this.on( check.getType() + '_add_die_modifiers', CheckExecutor.processDieModifiers );
-        this.emit( check.getType() + '_add_die_modifiers', check );
+        this.isExecutingHook = true;
+        this.on( check.getType() + '_add_die_modifiers_before', this.processDieModifiers );
+        this.emit( check.getType() + '_add_die_modifiers_before', check, 'before' );
+        while ( this.isExecutingHook ) { /* wait */ };
 
-        this.on( check.getType() + '_add_target_modifiers', CheckExecutor.processTargetModifiers );
-        this.emit( check.getType() + '_add_target_modifiers', check );
+        this.isExecutingHook = true;
+        this.on( check.getType() + '_add_target_modifiers', this.processTargetModifiers );
+        this.emit( check.getType() + '_add_target_modifiers', check, 'before' );
+        while ( this.isExecutingHook ) { /* wait */ };
 
-        CheckExecutor.doCheck( check );
+        this.doCheck( check );
 
-        this.on( check.getType() + '_add_target_modifiers', CheckExecutor.processTargetModifiers );
-        this.emit( check.getType() + '_add_target_modifiers', check );
+        this.isExecutingHook = true;
+        this.on( check.getType() + '_add_result_modifiers', this.processResultModifiers );
+        this.emit( check.getType() + '_add_result_modifiers', check, 'after' );
+        while ( this.isExecutingHook ) { /* wait */ };
 
-        this.removeListener( check.getType() + '_add_target_modifiers', CheckExecutor.processTargetModifiers );
-        this.removeListener( check.getType() + '_add_die_modifiers', CheckExecutor.processDieModifiers );
-        this.removeListener( check.getType() + '_add_result_modifiers', CheckExecutor.processResultModifiers );
+        this.isExecutingHook = true;
+        this.on( check.getType() + '_add_die_modifiers_after', this.processDieModifiers );
+        this.emit( check.getType() + '_add_die_modifiers_after', check, 'after' );
+        while ( this.isExecutingHook ) { /* wait */ };
+
+        // Has the dice bag been affected in a way that affects the final result?  Compare the difference between
+        // the adjusted and original dice rolls and apply the difference to the result.
+
+        let difference = check.getDieBag().getTotal() - check.getRawRollResult();
+        if ( difference !== 0 ) {
+                check.setResult( check.getResult() + difference );
+        }
+
+        this.removeListener( check.getType() + '_add_die_modifiers_before', this.processDieModifiers );
+        this.removeListener( check.getType() + '_add_target_modifiers', this.processTargetModifiers );
+        this.removeListener( check.getType() + '_add_result_modifiers', this.processResultModifiers );
+        this.removeListener( check.getType() + '_add_die_modifiers_after', this.processDieModifiers );
 
         return check.isPass();
     }
 
-    private static doCheck( check : Check ) {
+    private doCheck( check : Check ) {
 
-        check.getDieBag().roll();
+        check.check();
     }
 
-    private static processTargetModifiers( check : Check ) : void {
+    private processTargetModifiers( check : Check, phase: string ) : void {
 
         let counter: number;
         let targetModifiers = check.getTargetModifiers();
@@ -60,9 +78,11 @@ export class CheckExecutor extends EventEmitter {
 
             check.setTarget( check.getTarget() + targetModifiers[counter].value );
         }
+
+        this.isExecutingHook = false;
     }
 
-    private static processResultModifiers( check : Check ) : void {
+    private processResultModifiers( check : Check, phase: string ) : void {
 
         let counter: number;
         let resultModifiers = check.getResultModifiers();
@@ -71,21 +91,34 @@ export class CheckExecutor extends EventEmitter {
 
             check.setResult( check.getResult() + resultModifiers[counter].value );
         }
+
+        this.isExecutingHook = false;
     }
 
-    private static processDieModifiers( check : Check ) : void {
+    private processDieModifiers( check : Check, phase: string ) : void {
 
         let counter: number;
         let dieModifiers = check.getDieModifiers();
 
         for ( counter = 0 ; counter < dieModifiers.length ; counter++ ) {
 
-            //@TODO Implement This
+            if ( dieModifiers[counter].phase != phase ) { continue; }
+
+            if ( dieModifiers[counter].remove ) {
+
+                check.getDieBag().removeBag( dieModifiers[counter].dieBag, dieModifiers[counter].strictRemove);
+            } else {
+
+                check.getDieBag().addBag( dieModifiers[counter].dieBag );
+            }
         }
+
+        this.isExecutingHook = false;
     }
 
 
     private constructor() {
+
         super();
     }
 }
