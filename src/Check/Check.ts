@@ -1,10 +1,13 @@
-import { DieBag } from "./DieBag";
+import { DieBag } from "../DieBag";
+import { DieModifier } from "./Modifier/DieModifier";
+import { TargetModifier } from "./Modifier/TargetModifier";
+import { ResultModifier } from "./Modifier/ResultModifier";
 
 export abstract class Check {
 
-    protected targetModifiers: { name: string, value: number}[] = [];
-    protected resultModifiers: { name: string, value: number}[] = [];
-    protected dieModifiers: { name: string, dieBag: DieBag, phase: string, remove: boolean, strictRemove: boolean }[] = [];
+    protected targetModifiers: TargetModifier[] = [];
+    protected resultModifiers: ResultModifier[] = [];
+    protected dieModifiers: DieModifier[] = [];
 
     protected rawResult: number = 0;
     protected result: number = 0;
@@ -24,24 +27,24 @@ export abstract class Check {
         this.addResultModifier( { name: 'baseAttributeModifier', value: attributeValue } );
     }
 
-    public addTargetModifier( modifier: { name: string, value: number } ) : void {
+    public addTargetModifier( modifier: TargetModifier ) : void {
 
         this.targetModifiers.push( modifier );
     }
 
-    public addResultModifier( modifier: { name: string, value: number } ) : void {
+    public addResultModifier( modifier: ResultModifier ) : void {
 
         this.resultModifiers.push( modifier );
     }
 
-    public addDieModifier( modifier: { name: string, dieBag: DieBag, phase: string, remove: boolean, strictRemove: boolean } ) : void {
+    public addDieModifier( modifier: DieModifier ) : void {
 
         this.dieModifiers.push( modifier );
     }
 
-    public getTargetModifiers() { return this.targetModifiers; }
-    public getResultModifiers() { return this.resultModifiers; }
-    public getDieModifiers() { return this.dieModifiers; }
+    public getTargetModifiers() : TargetModifier[] { return this.targetModifiers; }
+    public getResultModifiers() : ResultModifier[] { return this.resultModifiers; }
+    public getDieModifiers() : DieModifier[] { return this.dieModifiers; }
 
 
     public isPass() : boolean {

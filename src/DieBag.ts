@@ -99,7 +99,7 @@ export class DieBag {
 
                 let value = bag.dieMap[groupIndex][guestDieIndex].getValue();
 
-                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; guestDieIndex++ ) {
+                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; selfDieIndex++ ) {
 
                     if ( self.dieMap.hasOwnProperty( groupIndex ) &&
                          value === self.dieMap[groupIndex][selfDieIndex].getValue() &&
