@@ -36,7 +36,7 @@ export declare abstract class Check {
      * Get a report on the status of the check
      * @param {boolean} getReportAsString
      *
-     * @returns {string | {{isPass: boolean; target: number; result: number}}
+     * @returns {string | {{isPass: boolean; target: number; result: number, modifiers: []any}}
      */
     report(getReportAsString: boolean): any;
     abstract getType(): string;

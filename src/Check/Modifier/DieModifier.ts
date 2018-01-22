@@ -15,4 +15,10 @@ export class DieModifier extends Modifier {
     public getDieBag(): DieBag {
         return this.dieBag;
     }
+
+    public setDieBag( bag : DieBag ): DieModifier {
+
+        this.dieBag = bag;
+        return this;
+    }
 }

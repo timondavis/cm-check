@@ -91,11 +91,16 @@ export abstract class Check {
      * Get a report on the status of the check
      * @param {boolean} getReportAsString
      *
-     * @returns {string | {{isPass: boolean; target: number; result: number}}
+     * @returns {string | {{isPass: boolean; target: number; result: number, modifiers: []any}}
      */
     public report( getReportAsString : boolean ) : any {
 
-        let report = { isPass: this.isPass(), target: this.target, result: this.result };
+        let report = { isPass: this.isPass(), target: this.target, result: this.result,
+        modifiers: [
+            { targetModifiers: this.getTargetModifiers() },
+            { resultModifiers: this.getResultModifiers() },
+            { dieModifiers: this.getDieModifiers() },
+        ]};
         return ( getReportAsString ) ? JSON.stringify( report ) : report;
     }
 
