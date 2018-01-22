@@ -1,4 +1,5 @@
-export class TargetModifier {
+import { Modifier } from "./Modifier";
 
-    public constructor( public name: string, public value: number) {}
+export class TargetModifier extends Modifier {
+
 }

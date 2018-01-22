@@ -1,10 +1,14 @@
 import { DieBag } from "../../DieBag";
-export class DieModifier {
+import { Modifier } from "./Modifier";
+export class DieModifier extends Modifier {
 
     public constructor(
         public name: string,
         public dieBag: DieBag,
         public phase: string,
         public remove: boolean,
-        public strictRemove: boolean ) {}
+        public strictRemove: boolean ) {
+
+        super( name, -1 );
+    }
 }

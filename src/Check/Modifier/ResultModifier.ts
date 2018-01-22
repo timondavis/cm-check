@@ -1,4 +1,2 @@
-export class ResultModifier{
-
-    public constructor( public name: string, public value: number) {}
-}
+import { Modifier } from "./Modifier";
+export class ResultModifier extends Modifier{ }

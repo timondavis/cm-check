@@ -1,0 +1,12 @@
+import { ModifierFactory } from "./ModifierFactory";
+import { Modifier } from "./Modifier";
+import { ResultModifier } from "./ResultModifier";
+
+export class ResultModifierFactory extends ModifierFactory {
+
+    create( name: string, args: { key: string[]; value: string } ): Modifier {
+
+        return new ResultModifier( name, (args.hasOwnProperty( 'value' )) ? Number( args['value'] ) : 0 );
+    }
+
+}

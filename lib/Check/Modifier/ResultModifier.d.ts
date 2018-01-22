@@ -1,5 +1,3 @@
-export declare class ResultModifier {
-    name: string;
-    value: number;
-    constructor(name: string, value: number);
+import { Modifier } from "./Modifier";
+export declare class ResultModifier extends Modifier {
 }

@@ -1,5 +1,6 @@
 import { DieBag } from "../../DieBag";
-export declare class DieModifier {
+import { Modifier } from "./Modifier";
+export declare class DieModifier extends Modifier {
     name: string;
     dieBag: DieBag;
     phase: string;

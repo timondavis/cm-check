@@ -1,1 +1,1 @@
-{"version":3,"file":"ResultModifier.js","sourceRoot":"","sources":["../../../src/Check/Modifier/ResultModifier.ts"],"names":[],"mappings":";;AAAA;IAEI,wBAA2B,IAAY,EAAS,KAAa;QAAlC,SAAI,GAAJ,IAAI,CAAQ;QAAS,UAAK,GAAL,KAAK,CAAQ;IAAG,CAAC;IACrE,qBAAC;AAAD,CAAC,AAHD,IAGC;AAHY,wCAAc"}
+{"version":3,"file":"ResultModifier.js","sourceRoot":"","sources":["../../../src/Check/Modifier/ResultModifier.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,uCAAsC;AACtC;IAAoC,kCAAQ;IAA5C;;IAA8C,CAAC;IAAD,qBAAC;AAAD,CAAC,AAA/C,CAAoC,mBAAQ,GAAG;AAAlC,wCAAc"}

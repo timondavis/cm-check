@@ -1,6 +1,7 @@
+import { Modifier } from "./Modifier";
 
 export abstract class ModifierFactory {
 
-    public abstract createNew( name: string, args: { key: string[], value: string } ) ;
+    public abstract create( name: string, args: { key: string[], value: string } ) : Modifier;
 }
 
