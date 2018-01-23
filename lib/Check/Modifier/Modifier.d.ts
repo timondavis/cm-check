@@ -1,8 +1,10 @@
+import { Check } from "../Check";
 export declare abstract class Modifier {
     protected name: string;
     protected value: string | number | string[] | number[];
+    abstract applyTo(check: Check): void;
+    abstract getType(): string;
     protected phase: string;
-    protected strict: boolean;
     constructor(name: string, value: string | number | string[] | number[]);
     getName(): string;
     getValue(): string | number | string[] | number[];
@@ -20,14 +22,11 @@ export declare abstract class Modifier {
      */
     setPhase(phase: string): Modifier;
     /**
-     * Modifier should be implemented in 'strict' mode (used optionally by each child implementation)
-     * @returns {boolean}
+     * Convenience method for summing values stored in the value array.  Only works if they're all numbers.
+     *
+     * @pre  All items in this.value must be numbers - they can be strings in there, but they must be numeric strings.
+     *
+     * @returns {number | boolean} Will return false if NaN is found in value array or as value.
      */
-    isStrict(): boolean;
-    /**
-     * Reports on whether modifier is being used in 'strict' mode.
-     * @param {boolean} isStrict
-     * @returns {boolean}
-     */
-    setStrict(isStrict: boolean): boolean;
+    protected sumOfValues(): number | boolean;
 }

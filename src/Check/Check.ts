@@ -1,12 +1,9 @@
 import { DieBag } from "../DieBag";
-import { DieModifier } from "./Modifier/DieModifier";
-import { TargetModifier } from "./Modifier/TargetModifier";
-import { ResultModifier } from "./Modifier/ResultModifier";
-import { Modifier } from "../../lib/Check/Modifier/Modifier";
+import { Modifier } from "./Modifier/Modifier";
 
 export abstract class Check {
 
-    protected modifiers : Modifier[];
+    protected modifiers : Modifier[] = [];
 
     protected rawResult: number = 0;
     protected result: number = 0;
@@ -134,7 +131,8 @@ export abstract class Check {
             target: this.target,
             result: this.result,
             modifiers: this.getModifiers(),
-            rollResult: this.getDieBag().getTotal()
+            rollResult: this.getDieBag().getTotal(),
+            dieBag: this.getDieBag(),
         };
         return ( getReportAsString ) ? JSON.stringify( report ) : report;
     }

@@ -1,6 +1,5 @@
 import { Modifier } from "./Modifier";
 import { Check } from "../Check";
-import { DieBag } from "../../DieBag";
 export class DieModifier extends Modifier {
 
     applyTo( check: Check ): void {
@@ -26,7 +25,7 @@ export class DieModifier extends Modifier {
         super( name, value );
     }
 
-    protected getType(): string {
+    public getType(): string {
         return 'die';
     }
 
@@ -43,14 +42,17 @@ export class DieModifier extends Modifier {
     protected static decodeDieString( dieCode : string ) : { directive: string, value: number[] } {
 
         let dieDefinition : string[];
-        let numericDieDefinition : number[] = [];
-        let count: number = 0;
-        let sides: number = 0;
+        let count: number;
+        let sides: number;
         let directive: string = 'add';
 
-        if ( dieCode.indexOf( '-', 0 ) === 0 ) { directive = 'remove';  }
+        if ( dieCode.indexOf( '-', 0 ) === 0 ) {
+            directive = 'remove';
+            dieCode = dieCode.substr( 1 );
+        }
 
-        dieDefinition = dieCode.split( 'd', 1 );
+
+        dieDefinition = dieCode.split( 'd', 2 );
 
         if ( dieDefinition.length !== 2 ) { throw ( "Invalid die definition string: " + dieCode ); }
 

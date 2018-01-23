@@ -5,7 +5,7 @@ export declare class DieModifier extends Modifier {
     protected value: string | number | string[] | number[];
     applyTo(check: Check): void;
     constructor(name: string, value: string | number | string[] | number[]);
-    protected getType(): string;
+    getType(): string;
     protected static processDieDirectiveOn(check: Check, dieDirective: {
         directive: string;
         value: number[];

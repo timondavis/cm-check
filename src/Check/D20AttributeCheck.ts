@@ -1,5 +1,5 @@
 import { Check } from './Check';
-import { ResultModifier } from "../../lib/Check/Modifier/ResultModifier";
+import { ResultModifier } from "./Modifier/ResultModifier";
 
 export class D20AttributeCheck extends Check {
 

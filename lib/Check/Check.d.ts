@@ -1,5 +1,5 @@
 import { DieBag } from "../DieBag";
-import { Modifier } from "../../lib/Check/Modifier/Modifier";
+import { Modifier } from "./Modifier/Modifier";
 export declare abstract class Check {
     protected target: number;
     protected modifiers: Modifier[];

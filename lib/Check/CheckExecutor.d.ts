@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { Check } from "./Check";
 export declare class CheckExecutor extends EventEmitter {
     private static instance;
-    private isExecutingHook;
+    private static locked;
     /**
      * Get the global instance of the Check Machine
      * @returns {CheckExecutor}
@@ -14,19 +14,18 @@ export declare class CheckExecutor extends EventEmitter {
      *
      * @TODO THREAD LOCKING IS VERY RUDIMENTARY.  IMPROVE
      * @param {Check} check
-     * @param entity
-     * @param {number} target
      * @returns {Check}
      */
-    execute(check: Check): boolean;
+    execute(check: Check): Check;
     /**
      * Execute a check passed in
      *
      * @param {Check} check
      */
-    private doCheck(check);
-    private processTargetModifiers(check, phase);
-    private processResultModifiers(check, phase);
-    private processDieModifiers(check, phase);
+    private static doCheck(check);
+    private static processModifiers(check, phase);
+    protected static engageThreadLock(): void;
+    protected static liftThreadLock(): void;
+    protected static isThreadLocked(): boolean;
     private constructor();
 }

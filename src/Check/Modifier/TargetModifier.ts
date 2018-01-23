@@ -9,7 +9,7 @@ export class TargetModifier extends Modifier {
         check.setTarget( check.getTarget() + sumOfValues );
     }
 
-    protected getType(): string {
+    public getType(): string {
         return 'target';
     }
 }

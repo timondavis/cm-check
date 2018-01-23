@@ -2,6 +2,10 @@ import { Check } from "../Check";
 
 export abstract class Modifier {
 
+    abstract applyTo( check: Check ): void;
+
+    abstract getType(): string;
+
     protected phase: string = 'before';
 
     public constructor( protected name: string, protected value: string | number | string[] | number[] ) { }
@@ -38,13 +42,6 @@ export abstract class Modifier {
     }
 
     /**
-     * Apply the modifier to a check.
-     *
-     * @param {Check} check
-     */
-    public abstract applyTo( check : Check ) : void;
-
-    /**
      * Convenience method for summing values stored in the value array.  Only works if they're all numbers.
      *
      * @pre  All items in this.value must be numbers - they can be strings in there, but they must be numeric strings.
@@ -73,11 +70,5 @@ export abstract class Modifier {
         return ( isNaN( Number( this.value ) ) ? false : Number( this.value ) );
     }
 
-    /**
-     * Returns the typename of this modifier
-     *
-     * @returns {string}
-     */
-    protected abstract getType() : string;
 }
 
