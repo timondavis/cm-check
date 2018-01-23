@@ -2,12 +2,11 @@ import { DieBag } from "../DieBag";
 import { DieModifier } from "./Modifier/DieModifier";
 import { TargetModifier } from "./Modifier/TargetModifier";
 import { ResultModifier } from "./Modifier/ResultModifier";
+import { Modifier } from "../../lib/Check/Modifier/Modifier";
 
 export abstract class Check {
 
-    protected targetModifiers: TargetModifier[] = [];
-    protected resultModifiers: ResultModifier[] = [];
-    protected dieModifiers: DieModifier[] = [];
+    protected modifiers : Modifier[];
 
     protected rawResult: number = 0;
     protected result: number = 0;
@@ -31,49 +30,20 @@ export abstract class Check {
      *
      * @param {TargetModifier} modifier
      */
-    public addTargetModifier( modifier: TargetModifier ) : void {
+    public addModifier( modifier: Modifier ) : void {
 
-        this.targetModifiers.push( modifier );
+        this.modifiers.push( modifier );
     }
 
     /**
-     * Add a new modifier to the check's result after the roll
+     * Get the modifiers attributed to this check.
      *
-     * @param {ResultModifier} modifier
+     * @returns {Modifier[]}
      */
-    public addResultModifier( modifier: ResultModifier ) : void {
+    public getModifiers() : Modifier[] {
 
-        this.resultModifiers.push( modifier );
+        return this.modifiers;
     }
-
-    /**
-     * Add a new modifier to the amount of die (before or after the roll)
-     *
-     * @param {DieModifier} modifier
-     */
-    public addDieModifier( modifier: DieModifier ) : void {
-
-        this.dieModifiers.push( modifier );
-    }
-
-    /**
-     * Get a collection of all registered target modifiers
-     * @returns {TargetModifier[]}
-     */
-    public getTargetModifiers() : TargetModifier[] { return this.targetModifiers; }
-
-    /**
-     * Get a collection of all registered result modifiers
-     * @returns {ResultModifier[]}
-     */
-    public getResultModifiers() : ResultModifier[] { return this.resultModifiers; }
-
-    /**
-     * Get a collection of all registered die modifiers
-     * @returns {DieModifier[]}
-     */
-    public getDieModifiers() : DieModifier[] { return this.dieModifiers; }
-
 
     /**
      * Has the check passed?
@@ -163,11 +133,7 @@ export abstract class Check {
             isPass: this.isPass(),
             target: this.target,
             result: this.result,
-            modifiers: [
-                { targetModifiers: this.getTargetModifiers() },
-                { resultModifiers: this.getResultModifiers() },
-                { dieModifiers: this.getDieModifiers() },
-            ],
+            modifiers: this.getModifiers(),
             rollResult: this.getDieBag().getTotal()
         };
         return ( getReportAsString ) ? JSON.stringify( report ) : report;

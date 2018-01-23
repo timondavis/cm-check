@@ -1,2 +1,13 @@
 import { Modifier } from "./Modifier";
-export class ResultModifier extends Modifier{ }
+import { Check } from "../Check";
+export class ResultModifier extends Modifier{
+
+    applyTo( check: Check ): void {
+        let sumOfValues = Number( this.sumOfValues() );
+        check.setResult( check.getResult() + sumOfValues );
+    }
+
+    protected getType(): string {
+        return 'result';
+    }
+}

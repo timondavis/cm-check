@@ -1,23 +1,17 @@
-import { DieBag } from "../../DieBag";
 import { Modifier } from "./Modifier";
+import { Check } from "../Check";
 export declare class DieModifier extends Modifier {
-    name: string;
-    dieBag: DieBag;
-    phase: string;
-    remove: boolean;
-    strictRemove: boolean;
-    constructor(name: string, dieBag: DieBag, phase: string, remove: boolean, strictRemove: boolean);
-    /**
-     * GEt the DieBag for this modifier
-     *
-     * @returns {DieBag}
-     */
-    getDieBag(): DieBag;
-    /**
-     * Set or reset the DieBag on this modifier
-     *
-     * @param {DieBag} bag
-     * @returns {DieModifier}
-     */
-    setDieBag(bag: DieBag): DieModifier;
+    protected name: string;
+    protected value: string | number | string[] | number[];
+    applyTo(check: Check): void;
+    constructor(name: string, value: string | number | string[] | number[]);
+    protected getType(): string;
+    protected static processDieDirectiveOn(check: Check, dieDirective: {
+        directive: string;
+        value: number[];
+    }): void;
+    protected static decodeDieString(dieCode: string): {
+        directive: string;
+        value: number[];
+    };
 }

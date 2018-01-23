@@ -1,12 +1,8 @@
 import { DieBag } from "../DieBag";
-import { DieModifier } from "./Modifier/DieModifier";
-import { TargetModifier } from "./Modifier/TargetModifier";
-import { ResultModifier } from "./Modifier/ResultModifier";
+import { Modifier } from "../../lib/Check/Modifier/Modifier";
 export declare abstract class Check {
     protected target: number;
-    protected targetModifiers: TargetModifier[];
-    protected resultModifiers: ResultModifier[];
-    protected dieModifiers: DieModifier[];
+    protected modifiers: Modifier[];
     protected rawResult: number;
     protected result: number;
     protected dieBag: DieBag;
@@ -21,34 +17,13 @@ export declare abstract class Check {
      *
      * @param {TargetModifier} modifier
      */
-    addTargetModifier(modifier: TargetModifier): void;
+    addModifier(modifier: Modifier): void;
     /**
-     * Add a new modifier to the check's result after the roll
+     * Get the modifiers attributed to this check.
      *
-     * @param {ResultModifier} modifier
+     * @returns {Modifier[]}
      */
-    addResultModifier(modifier: ResultModifier): void;
-    /**
-     * Add a new modifier to the amount of die (before or after the roll)
-     *
-     * @param {DieModifier} modifier
-     */
-    addDieModifier(modifier: DieModifier): void;
-    /**
-     * Get a collection of all registered target modifiers
-     * @returns {TargetModifier[]}
-     */
-    getTargetModifiers(): TargetModifier[];
-    /**
-     * Get a collection of all registered result modifiers
-     * @returns {ResultModifier[]}
-     */
-    getResultModifiers(): ResultModifier[];
-    /**
-     * Get a collection of all registered die modifiers
-     * @returns {DieModifier[]}
-     */
-    getDieModifiers(): DieModifier[];
+    getModifiers(): Modifier[];
     /**
      * Has the check passed?
      *

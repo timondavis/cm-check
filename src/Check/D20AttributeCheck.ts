@@ -1,5 +1,5 @@
 import { Check } from './Check';
-import { ResultModifierFactory} from "./Modifier/ResultModifierFactory";
+import { ResultModifier } from "../../lib/Check/Modifier/ResultModifier";
 
 export class D20AttributeCheck extends Check {
 
@@ -9,9 +9,9 @@ export class D20AttributeCheck extends Check {
 
         if ( ! this.attributeName ) { this.attributeName = 'D20Attribute'; }
 
-        this.addResultModifier( new ResultModifierFactory().create( this.attributeName, {
-            value: String( D20AttributeCheck.translateAttributeValue( attributeValue ) )
-        }));
+        this.addModifier( new ResultModifier( this.attributeName,
+            D20AttributeCheck.translateAttributeValue( attributeValue ) ) );
+
     }
 
     /**
