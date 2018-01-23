@@ -3,9 +3,33 @@ export declare class Die {
     protected value: number;
     protected locked: boolean;
     constructor(sides: number);
-    roll(): any;
+    /**
+     * Roll the die and return the new result.
+     *
+     * @mutator
+     * @returns {Die}
+     */
+    roll(): Die;
+    /**
+     * Get the value of the die
+     * @returns {number}
+     */
     getValue(): number;
-    setValue(newValue: number): void;
-    setLock(locked?: boolean): void;
+    /**
+     * Set the value of the die
+     * @param {number} newValue
+     * @returns {Die}
+     */
+    setValue(newValue: number): Die;
+    /**
+     * Lock/Unlock the die from being removed or affected
+     * @param {boolean} locked
+     * @returns {Die}
+     */
+    setLock(locked?: boolean): Die;
+    /**
+     * Is the die locked?
+     * @returns {boolean}
+     */
     isLocked(): boolean;
 }

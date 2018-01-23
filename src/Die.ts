@@ -10,33 +10,60 @@ export class Die {
         this.roll();
     }
 
-    public roll() {
+    /**
+     * Roll the die and return the new result.
+     *
+     * @mutator
+     * @returns {Die}
+     */
+    public roll() : Die {
 
         if ( ! this.isLocked() ) {
 
-            return this.value = d( 1, this.sides );
+            this.value = d( 1, this.sides );
         }
 
-        return this.value;
+        return this;
     }
 
+    /**
+     * Get the value of the die
+     * @returns {number}
+     */
     public getValue() {
 
         return this.value;
     }
 
-    public setValue( newValue: number ) {
+    /**
+     * Set the value of the die
+     * @param {number} newValue
+     * @returns {Die}
+     */
+    public setValue( newValue: number ) : Die {
 
         if ( this.value > 0 && this.value <= this.sides ) {
             this.value = newValue;
         }
+
+        return this;
     }
 
-    public setLock( locked : boolean = true ) {
+    /**
+     * Lock/Unlock the die from being removed or affected
+     * @param {boolean} locked
+     * @returns {Die}
+     */
+    public setLock( locked : boolean = true ) : Die{
 
         this.locked = locked;
+        return this;
     }
 
+    /**
+     * Is the die locked?
+     * @returns {boolean}
+     */
     public isLocked() : boolean {
         return this.locked;
     }

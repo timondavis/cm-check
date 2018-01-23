@@ -44,8 +44,6 @@ export declare class DieBag {
      * @return {DieBag}
      */
     removeBag(bag: DieBag, strictRemove: boolean): DieBag;
-    private strictRemoveBag(bag);
-    private looseRemoveBag(bag);
     /**
      * Roll 'dem laughing bones...
      *
@@ -91,4 +89,6 @@ export declare class DieBag {
     getTotal(): number;
     private rollCollection();
     private refreshDieResults();
+    private strictRemoveBag(bag);
+    private looseRemoveBag(bag);
 }

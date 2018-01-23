@@ -1,25 +1,50 @@
 import { Check } from './Check';
+import { ResultModifier } from "./Modifier/ResultModifier";
 
 export class D20AttributeCheck extends Check {
 
-    protected attributeName : string = '';
+    public constructor( protected attributeValue : number, target: number, protected attributeName : string = '' ) {
 
-    public constructor( attributeValue : number, target: number ) {
+        super( target );
 
-        super( D20AttributeCheck.translateAttributeValue( attributeValue ), target );
-        this.dieBag.add( 1, 20 );
+        if ( ! this.attributeName ) { this.attributeName = 'D20Attribute'; }
+
+        this.addModifier( new ResultModifier( this.attributeName,
+            D20AttributeCheck.translateAttributeValue( attributeValue ) ) );
+
     }
 
-    public setAttribute( name : string ) {
+    /**
+     * Set the name of the attribute being checked against
+     * @param {string} name
+     */
+    public setAttributeName( name : string ) {
 
         this.attributeName = name;
     }
 
+    /**
+     * Get the name of the attribute being checked against
+     * @returns {string | undefined}
+     */
+    public getName() {
+
+        return this.attributeName;
+    }
+
+    /**
+     * Get the formal typename of this check
+     * @returns {string}
+     */
     public getType() : string {
 
         return this.attributeName + 'Attribute';
     }
 
+
+    /**
+     *
+     */
     protected setBaseDieBag(): void {
 
         this.dieBag.add( 1, 20 );
