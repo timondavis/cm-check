@@ -1,10 +1,13 @@
 import { Die } from "./Die";
 export declare class DieBag {
-    protected dieMap: {
+    protected _dieMap: {
         [key: string]: Die[];
     };
     protected rollResults: {
         [key: string]: number;
+    };
+    readonly dieMap: {
+        [key: string]: Die[];
     };
     /**
      * Add die to the bag.  Translates to the famous xdy pattern  (i.e. 2d6 == 2 six sided die)
@@ -63,7 +66,7 @@ export declare class DieBag {
         [key: string]: Die[];
     };
     /**
-     * Does the indicated # of sides already have an index in the dieMap?
+     * Does the indicated # of sides already have an index in the _dieMap?
      *
      * @param {number} sides
      *

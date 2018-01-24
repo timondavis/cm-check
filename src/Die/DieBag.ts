@@ -2,8 +2,12 @@ import { Die } from "./Die";
 
 export class DieBag {
 
-    protected dieMap : { [key:string] : Die[] } = {};
+    protected _dieMap : { [key:string] : Die[] } = {};
     protected rollResults : { [key:string] : number } = {};
+
+    get dieMap() : { [key:string] : Die[] } {
+        return this._dieMap;
+    }
 
     /**
      * Add die to the bag.  Translates to the famous xdy pattern  (i.e. 2d6 == 2 six sided die)
@@ -27,7 +31,7 @@ export class DieBag {
                 die.setValue( value );
             }
 
-            this.dieMap[sides].push( die );
+            this._dieMap[sides].push( die );
         }
 
         return this;
@@ -44,11 +48,11 @@ export class DieBag {
         let self = this;
         let dieIndex = 0;
 
-        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+        Object.keys( bag._dieMap ).forEach( function( groupIndex )  {
 
-            for ( dieIndex = 0 ; dieIndex < bag.dieMap[groupIndex].length ; dieIndex++ ) {
+            for ( dieIndex = 0 ; dieIndex < bag._dieMap[groupIndex].length ; dieIndex++ ) {
 
-                let newDie = bag.dieMap[groupIndex][dieIndex];
+                let newDie = bag._dieMap[groupIndex][dieIndex];
 
                 self.add( 1, Number( groupIndex ), newDie.getValue() );
             }
@@ -69,12 +73,12 @@ export class DieBag {
 
         if ( ! this.isDieIndexExists( sides ) ) { return this; }
 
-        let remainingDie: number = this.dieMap[ String( sides ) ].length;
+        let remainingDie: number = this._dieMap[ String( sides ) ].length;
 
         while ( remainingDie > 0 && count > 0 ) {
 
-            this.dieMap[ String( sides )].pop();
-            remainingDie = this.dieMap[ String( sides ) ].length;
+            this._dieMap[ String( sides )].pop();
+            remainingDie = this._dieMap[ String( sides ) ].length;
             count--;
         }
 
@@ -128,11 +132,11 @@ export class DieBag {
      */
     public report() {
 
-        return this.dieMap;
+        return this._dieMap;
     }
 
     /**
-     * Does the indicated # of sides already have an index in the dieMap?
+     * Does the indicated # of sides already have an index in the _dieMap?
      *
      * @param {number} sides
      *
@@ -140,7 +144,7 @@ export class DieBag {
      */
     protected isDieIndexExists( sides: number ) {
 
-        return this.dieMap.hasOwnProperty( String( sides ) );
+        return this._dieMap.hasOwnProperty( String( sides ) );
     }
 
     /**
@@ -155,7 +159,7 @@ export class DieBag {
      */
     protected addNewDieIndex( sides: number ) {
 
-        this.dieMap[ String( sides )] = [];
+        this._dieMap[ String( sides )] = [];
     }
 
 
@@ -181,15 +185,15 @@ export class DieBag {
 
         let self = this;
 
-        Object.keys( self.dieMap ).forEach( function( groupName: string ) {
+        Object.keys( self._dieMap ).forEach( function( groupName: string ) {
 
             self.rollResults[groupName] = 0;
 
-            Object.keys( self.dieMap[groupName] ).forEach( function( dieIndexString: string, dieIndex: number) {
+            Object.keys( self._dieMap[groupName] ).forEach( function( dieIndexString: string, dieIndex: number) {
 
-                let dieMapGroup = self.dieMap[groupName];
+                let _dieMapGroup = self._dieMap[groupName];
 
-                self.rollResults[groupName] += dieMapGroup[dieIndex].roll().getValue();
+                self.rollResults[groupName] += _dieMapGroup[dieIndex].roll().getValue();
             })
         });
     }
@@ -199,15 +203,15 @@ export class DieBag {
 
         let self = this;
 
-        Object.keys( self.dieMap ).forEach( function( groupName: string ) {
+        Object.keys( self._dieMap ).forEach( function( groupName: string ) {
 
             self.rollResults[groupName] = 0;
 
-            Object.keys( self.dieMap[groupName] ).forEach( function( dieIndexString: string, dieIndex: number) {
+            Object.keys( self._dieMap[groupName] ).forEach( function( dieIndexString: string, dieIndex: number) {
 
-                let dieMapGroup = self.dieMap[groupName];
+                let _dieMapGroup = self._dieMap[groupName];
 
-                self.rollResults[groupName] += dieMapGroup[dieIndex].getValue();
+                self.rollResults[groupName] += _dieMapGroup[dieIndex].getValue();
             })
         });
     }
@@ -218,19 +222,19 @@ export class DieBag {
         let guestDieIndex = 0;
         let selfDieIndex = 0;
 
-        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+        Object.keys( bag._dieMap ).forEach( function( groupIndex )  {
 
-            for ( guestDieIndex = 0 ; guestDieIndex < bag.dieMap[groupIndex].length ; guestDieIndex++ ) {
+            for ( guestDieIndex = 0 ; guestDieIndex < bag._dieMap[groupIndex].length ; guestDieIndex++ ) {
 
-                let value = bag.dieMap[groupIndex][guestDieIndex].getValue();
+                let value = bag._dieMap[groupIndex][guestDieIndex].getValue();
 
-                for ( selfDieIndex = 0 ; selfDieIndex < self.dieMap[groupIndex].length ; selfDieIndex++ ) {
+                for ( selfDieIndex = 0 ; selfDieIndex < self._dieMap[groupIndex].length ; selfDieIndex++ ) {
 
-                    if ( self.dieMap.hasOwnProperty( groupIndex ) &&
-                        value === self.dieMap[groupIndex][selfDieIndex].getValue() &&
-                        ! self.dieMap[groupIndex][selfDieIndex].isLocked() ) {
+                    if ( self._dieMap.hasOwnProperty( groupIndex ) &&
+                        value === self._dieMap[groupIndex][selfDieIndex].getValue() &&
+                        ! self._dieMap[groupIndex][selfDieIndex].isLocked() ) {
 
-                        self.dieMap[groupIndex].splice( selfDieIndex, 1 );
+                        self._dieMap[groupIndex].splice( selfDieIndex, 1 );
                         break;
                     }
                 }
@@ -243,9 +247,9 @@ export class DieBag {
 
         let self = this;
 
-        Object.keys( bag.dieMap ).forEach( function( groupIndex )  {
+        Object.keys( bag._dieMap ).forEach( function( groupIndex )  {
 
-            let groupSize = bag.dieMap[groupIndex].length;
+            let groupSize = bag._dieMap[groupIndex].length;
 
             self.remove( groupSize, Number(groupIndex) );
         });

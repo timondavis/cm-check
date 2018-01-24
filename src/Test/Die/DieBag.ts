@@ -94,4 +94,75 @@ describe( 'DieBag', () => {
         expect( bag.report()['6'] ).has.lengthOf( 1 );
     });
 
+    it( 'should change the value of the total die value after the after its been rolled', () => {
+
+        bag = new DieBag();
+
+        bag.add( 20, 8 );
+        let oldResults = bag.getTotal();
+
+        for( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
+
+            bag.roll();
+            if ( oldResults != bag.getTotal() ) { break; }
+        }
+
+        expect( oldResults ).to.not.be.equal( bag.getTotal() );
+    });
+
+    it ( 'should not cause locked die to be rerolled', () => {
+
+        bag = new DieBag();
+
+        bag.add( 12, 100 );
+        bag.dieMap['100'][0].setLock( true );
+        let legacyValue = bag.dieMap['100'][0].getValue();
+
+        for ( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
+
+            bag.roll();
+            if ( legacyValue != bag.dieMap['100'][0].getValue() ) { break; }
+        }
+
+        expect( legacyValue ).to.be.equal( bag.dieMap['100'][0].getValue() );
+    });
+
+    it( 'should provide an accurate report on the state of all die, sorted by type', () => {
+
+        bag = new DieBag();
+
+        bag.add( 4, 8 );
+        bag.add( 8,  6 );
+        bag.add( 10, 20 );
+        bag.add( 5, 4 );
+        bag.add( 7, 12 );
+        bag.add( 2, 8 );
+
+        bag.roll();
+
+        let reportedTotal = bag.getTotal();
+
+        expect( bag.dieMap['8']  ).has.lengthOf( 6  );
+        expect( bag.dieMap['6']  ).has.lengthOf( 8  );
+        expect( bag.dieMap['20'] ).has.lengthOf( 10 );
+        expect( bag.dieMap['4']  ).has.lengthOf( 5  );
+        expect( bag.dieMap['12'] ).has.lengthOf( 7  );
+
+        let total = 0;
+
+        for ( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
+
+            total = 0;
+
+            Object.keys( bag.dieMap ).forEach( sides => {
+
+                for ( let dieIndex  = 0 ; dieIndex < bag.dieMap[sides].length ; dieIndex++ ){
+
+                    total += bag.dieMap[sides][dieIndex].getValue();
+                }
+            });
+        }
+
+        expect( reportedTotal ).to.be.equal( total );
+    });
 });
