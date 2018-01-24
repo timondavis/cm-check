@@ -17,6 +17,8 @@ export declare class Die {
     getValue(): number;
     /**
      * Set the value of the die
+     *
+     * @throws
      * @param {number} newValue
      * @returns {Die}
      */

@@ -37,13 +37,17 @@ export class Die {
 
     /**
      * Set the value of the die
+     *
+     * @throws
      * @param {number} newValue
      * @returns {Die}
      */
     public setValue( newValue: number ) : Die {
 
-        if ( this.value > 0 && this.value <= this.sides ) {
+        if ( newValue > 0 && newValue <= this.sides ) {
             this.value = newValue;
+        } else {
+            throw( "Defined Die value exceeds available range" );
         }
 
         return this;
