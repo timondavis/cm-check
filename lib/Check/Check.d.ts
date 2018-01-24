@@ -1,4 +1,4 @@
-import { DieBag } from "../DieBag";
+import { DieBag } from "../Die/DieBag";
 import { Modifier } from "./Modifier/Modifier";
 export declare abstract class Check {
     protected target: number;

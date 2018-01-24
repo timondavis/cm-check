@@ -28,6 +28,7 @@
   "scripts": {
     "start": "concurrently \"npm run build:live\" \"npm run build:disk\"",
     "build:live": "nodemon --exec ./node_modules/.bin/ts-node ./src/index.ts",
-    "build:disk": "exec tsc -w"
+    "build:disk": "exec tsc -w",
+    "test": "mocha -r ts-node/register ./src/Test/**/*.ts"
   }
 }
