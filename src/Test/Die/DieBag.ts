@@ -1,8 +1,6 @@
 import { DieBag } from '../../Die/DieBag';
-import { assert } from 'chai';
 import { expect } from 'chai';
 import 'mocha';
-import { Die } from "../../Die/Die";
 
 describe( 'DieBag', () => {
 

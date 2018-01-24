@@ -3,11 +3,11 @@ import { assert } from 'chai';
 import { expect } from 'chai';
 import 'mocha';
 
-describe( 'Individual Die are behaving properly', () => {
+describe( 'Die', () => {
 
     let die: Die = new Die( 20 );
 
-    it( 'Creating new random die should work', () => {
+    it( 'should be created with any number of sides', () => {
 
         let randomSides : number;
         for( let turn = 0 ; turn < 3 ; turn++ ) {
@@ -18,14 +18,14 @@ describe( 'Individual Die are behaving properly', () => {
         }
     });
 
-    it( 'Rolling the die should generally change its value within 5 rolls', () => {
+    it( 'should likely produce a different die value within 50 rolls of the same die', () => {
 
         die = new Die( 20 );
 
         let startingValue = die.getValue();
         let valueHasChanged = false;
 
-        for ( let turn = 0 ; turn < 5 ; turn++ ) {
+        for ( let turn = 0 ; turn < 50 ; turn++ ) {
 
             die.roll();
 
@@ -39,7 +39,7 @@ describe( 'Individual Die are behaving properly', () => {
         expect( valueHasChanged ).to.be.true;
     });
 
-    it( 'Die should allow manual change of values', () => {
+    it( 'should allow manual updates to value', () => {
 
         die = new Die( 100  );
         die.roll();
@@ -48,7 +48,7 @@ describe( 'Individual Die are behaving properly', () => {
         assert( die.getValue() === 7 );
     });
 
-    it( 'Die should throw an error if a value is set out of range - the die should retain its value', () => {
+    it( 'should throw an error if a value is set out of range - the die should retain its value', () => {
 
         die = new Die( 6 );
 
@@ -61,7 +61,7 @@ describe( 'Individual Die are behaving properly', () => {
         expect( die.getValue() ).to.be.equal( 4 );
     });
 
-    it( 'Locked die should not change in value', () => {
+    it( 'should not change in value if locked', () => {
 
         die = new Die( 100 );
 
@@ -76,7 +76,7 @@ describe( 'Individual Die are behaving properly', () => {
         }
     });
 
-    it( 'Die can be locked and unlocked', () => {
+    it( 'should behave as expected when locked and unlocked', () => {
 
        die = new Die( 10000 );
 
@@ -98,7 +98,7 @@ describe( 'Individual Die are behaving properly', () => {
 
     });
 
-    it( 'Die reports correctly on lock state', () => {
+    it( 'should report correctly on lock state', () => {
 
         die = new Die( 50 );
 

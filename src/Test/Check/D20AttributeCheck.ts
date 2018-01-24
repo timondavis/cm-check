@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 
-describe( 'Basic D20 Check', () => {
+describe( 'Check/D20AttributeCheck', () => {
     let attributeValue = Math.floor( Math.random() * Math.floor( 20 ) ) + 1;
     let targetValue = Math.floor( Math.random() * Math.floor( 10 ) + 10 );
 
