@@ -41,10 +41,6 @@ export class D20AttributeCheck extends Check {
         return this.attributeName + 'Attribute';
     }
 
-
-    /**
-     *
-     */
     protected setBaseDieBag(): void {
 
         this.dieBag.add( 1, 20 );
