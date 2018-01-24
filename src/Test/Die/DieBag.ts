@@ -79,4 +79,21 @@ describe( 'DieBag', () => {
         expect( bag.report()['4'] ).has.lengthOf( 2 );
     });
 
+    it( 'should allow die to removed en masse by supplying a DieBag', () => {
+
+        bag = new DieBag();
+        let minusBag = new DieBag();
+
+        bag.add( 4, 12 );
+        bag.add( 2, 6 );
+
+        minusBag.add( 2, 12 );
+        minusBag.add( 1, 6 );
+
+        bag.removeBag( minusBag, false );
+
+        expect( bag.report()['12'] ).has.lengthOf( 2 );
+        expect( bag.report()['6'] ).has.lengthOf( 1 );
+    });
+
 });
