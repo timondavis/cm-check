@@ -1,6 +1,7 @@
 import { DieBag } from '../../Die/DieBag';
 import { expect } from 'chai';
 import 'mocha';
+import { TestCore } from "../TestCore";
 
 describe( 'DieBag', () => {
 
@@ -165,4 +166,29 @@ describe( 'DieBag', () => {
 
         expect( reportedTotal ).to.be.equal( total );
     });
+
+    it( 'should deliver all die filtered by # of sides correctly', () => {
+
+        bag = new DieBag();
+
+        let count1 = TestCore.randomInt( 100 );
+        let sides1 = TestCore.randomInt( 100 );
+        let count2 = TestCore.randomInt( 100 );
+        let sides2 = TestCore.randomInt( 100 );
+        let count3 = TestCore.randomInt( 100 );
+        let sides3 = TestCore.randomInt( 100 );
+
+        bag.add( count1, sides1 );
+        bag.add( count2, sides2 );
+        bag.add( count3, sides3 );
+
+        bag.roll();
+
+        expect( bag.getSetOfSidedDie( sides1 ).length ).is.equal( count1 );
+        expect( bag.getSetOfSidedDie( sides2 ).length ).is.equal( count2 );
+        expect( bag.getSetOfSidedDie( sides3 ).length ).is.equal( count3 );
+
+    });
+
+
 });

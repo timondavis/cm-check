@@ -90,6 +90,13 @@ export declare class DieBag {
      * @returns {number}
      */
     getTotal(): number;
+    /**
+     * Get a collection of all die in the bag with the indicated amount of sides
+     *
+     * @param {number | string} sides
+     * @returns {Die[]}
+     */
+    getSetOfSidedDie(sides: number | string): Die[];
     private rollCollection();
     private refreshDieResults();
     private strictRemoveBag(bag);

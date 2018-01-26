@@ -126,14 +126,15 @@ export abstract class Check {
      */
     public report( getReportAsString : boolean ) : any {
 
-        let report = {
-            isPass: this.isPass(),
-            target: this.target,
-            result: this.result,
-            modifiers: this.getModifiers(),
-            rollResult: this.getDieBag().getTotal(),
-            dieBag: this.getDieBag(),
-        };
+        let report = new CheckReport(
+            this.isPass(),
+            this.getTarget(),
+            this.getResult(),
+            this.getModifiers(),
+            this.getRawRollResult(),
+            this.getDieBag()
+        );
+
         return ( getReportAsString ) ? JSON.stringify( report ) : report;
     }
 
@@ -148,4 +149,18 @@ export abstract class Check {
      * Set a new DieBag on this check.
      */
     protected abstract setBaseDieBag() : void;
+}
+
+export class CheckReport {
+
+    public constructor(
+        public isPass : boolean,
+        public target : number,
+        public result : number,
+        public modifiers : Modifier[],
+        public rollResult : number,
+        public dieBag: DieBag
+    ) {
+
+    }
 }

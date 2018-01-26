@@ -181,6 +181,22 @@ export class DieBag {
         return total;
     }
 
+    /**
+     * Get a collection of all die in the bag with the indicated amount of sides
+     *
+     * @param {number | string} sides
+     * @returns {Die[]}
+     */
+    public getSetOfSidedDie( sides : number | string ) : Die[] {
+
+        if ( isNaN( Number( sides ) ) )  { throw "Non-numerical value requested"; }
+        sides = String( Math.floor( Number( sides ) ) );
+
+        if ( ! this.dieMap.hasOwnProperty( sides ) ) { return []; }
+
+        return this.dieMap[sides];
+    }
+
     private rollCollection() {
 
         let self = this;

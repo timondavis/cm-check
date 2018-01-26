@@ -86,3 +86,12 @@ export declare abstract class Check {
      */
     protected abstract setBaseDieBag(): void;
 }
+export declare class CheckReport {
+    isPass: boolean;
+    target: number;
+    result: number;
+    modifiers: Modifier[];
+    rollResult: number;
+    dieBag: DieBag;
+    constructor(isPass: boolean, target: number, result: number, modifiers: Modifier[], rollResult: number, dieBag: DieBag);
+}
