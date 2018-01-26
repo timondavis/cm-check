@@ -187,8 +187,5 @@ describe( 'DieBag', () => {
         expect( bag.getSetOfSidedDie( sides1 ).length ).is.equal( count1 );
         expect( bag.getSetOfSidedDie( sides2 ).length ).is.equal( count2 );
         expect( bag.getSetOfSidedDie( sides3 ).length ).is.equal( count3 );
-
     });
-
-
 });
