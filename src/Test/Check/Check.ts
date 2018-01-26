@@ -23,10 +23,34 @@ describe( 'Check', () => {
         c.getDieBag().dieMap['20'][0].setLock( true );
         c.addModifier( new ResultModifier( 'result-boost', 5 ) );
 
-        c.check();
+        let modifiers = c.getModifiers();
 
-        expect( c.getResult() ).to.be.equal( 14 );
+        expect ( modifiers[0].getName() == 'result-boost' );
+    });
 
+    it ( 'should report pass/fail accurately', () => {
+
+        c = new MyCheck( 10 );
+
+        c.setResult( 9 );
+        expect( c.isPass() ).to.be.false;
+
+        c.setResult( 10 );
+        expect( c.isPass() ).to.be.true;
+
+        c.setResult( 11 );
+        expect( c.isPass() ).to.be.true;
+
+        c.setTarget(20);
+
+        c.setResult( 19 );
+        expect( c.isPass() ).to.be.false;
+
+        c.setResult( 20 );
+        expect( c.isPass() ).to.be.true;
+
+        c.setResult( 21 );
+        expect( c.isPass() ).to.be.true;
     });
 
 });

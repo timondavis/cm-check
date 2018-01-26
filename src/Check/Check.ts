@@ -49,7 +49,7 @@ export abstract class Check {
      */
     public isPass() : boolean {
 
-        return ( this.result >= this.target );
+        return ( this.getResult() >= this.getTarget() );
     }
 
     /**
