@@ -52,9 +52,10 @@ export class D20AttributeCheck extends Check {
         else if ( value <= 6 ) { return -2; }
         else if ( value <= 9 ) { return -1; }
         else if ( value <= 12 ) { return 0; }
-        else if ( value <= 15 ) { return 1; }
-        else if ( value <= 18 ) { return 2; }
-        else if ( value <= 21 ) { return 3; }
-        else { return 4; }
+        else {
+
+            value -= 12;
+            return Math.ceil( value / 3 );
+        }
     }
 }

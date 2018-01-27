@@ -12,7 +12,6 @@ export declare class CheckExecutor extends EventEmitter {
     /**
      * Execute a check
      *
-     * @TODO THREAD LOCKING IS VERY RUDIMENTARY.  IMPROVE
      * @param {Check} check
      * @returns {Check}
      */
