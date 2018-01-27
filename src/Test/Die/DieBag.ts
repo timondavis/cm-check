@@ -170,14 +170,14 @@ describe( 'DieBag', () => {
         let total : number;
         let reportedTotal : number;
 
-        dieDefinitions = generateDieDefinitions();
+        dieDefinitions = TestCore.generateDieDefinitions();
 
-        addDieToBagWithDefinitions( dieDefinitions, bag );
+        TestCore.addDieToBagWithDefinitions( dieDefinitions, bag );
         bag.roll();
-        validateCountsOnBagWithDefinitions( dieDefinitions, bag );
+        TestCore.validateCountsOnBagWithDefinitions( dieDefinitions, bag );
 
         reportedTotal = bag.getTotal();
-        total = countTotalValuesOfDieInBag( bag );
+        total = TestCore.countTotalValuesOfDieInBag( bag );
 
         expect( reportedTotal ).to.be.equal( total );
     });
@@ -204,54 +204,6 @@ describe( 'DieBag', () => {
         expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
     });
 
-    function generateDieDefinitions() {
-
-        let sides : number;
-        let dieDefs : number[][] = [];
-        let sidesUsed : number[] = [];
-
-        for ( let defCounter = 0 ; defCounter < TestCore.randomInt( 20 ) ; defCounter++ ){
 
 
-            do {
-                sides = TestCore.randomInt();
-            } while( sidesUsed.indexOf( sides ) != -1 );
-
-            sidesUsed.push( sides );
-
-            dieDefs.push( [TestCore.randomInt(), sides ]);
-        }
-
-        return dieDefs;
-    }
-
-    function addDieToBagWithDefinitions( dieDefinitions: number[][], bag : DieBag ) {
-
-        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
-
-            bag.add( dieDefinitions[defCounter][0], dieDefinitions[defCounter][1] );
-        }
-    }
-
-    function validateCountsOnBagWithDefinitions( dieDefinitions : number[][], bag : DieBag ) {
-
-        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
-
-            expect( bag.getDieWithSides( dieDefinitions[defCounter][1] ) ).to.have.lengthOf( dieDefinitions[defCounter][0] );
-        }
-    }
-
-    function countTotalValuesOfDieInBag( bag: DieBag ) : number {
-
-        let total = 0;
-        Object.keys( bag.dieMap ).forEach( sides => {
-
-            for ( let dieIndex = 0; dieIndex < bag.dieMap[ sides ].length; dieIndex++ ) {
-
-                total += bag.dieMap[ sides ][ dieIndex ].getValue();
-            }
-        });
-
-        return total;
-    }
 });

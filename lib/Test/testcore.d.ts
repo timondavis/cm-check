@@ -23,4 +23,25 @@ export declare class TestCore {
     static trackRandomAddedDie(tracker: {
         [key: string]: number;
     }, bag: DieBag, operator?: string, count?: number, sides?: number): void;
+    /**
+     * Generate an array of 2-element number arrays, holding the [0]count and [1]sides
+     *
+     * @returns {number[][]}
+     */
+    static generateDieDefinitions(): number[][];
+    /**
+     * Apply the defined die in the die definitions to a DieBag
+     *
+     * @param {number[][]} dieDefinitions
+     * @param {DieBag} bag
+     */
+    static addDieToBagWithDefinitions(dieDefinitions: number[][], bag: DieBag): void;
+    /**
+     * Validate the counts of each type of die in the DieBag match up with whats expected in the supplied die
+     * definitions.
+     * @param {number[][]} dieDefinitions
+     * @param {DieBag} bag
+     */
+    static validateCountsOnBagWithDefinitions(dieDefinitions: number[][], bag: DieBag): void;
+    static countTotalValuesOfDieInBag(bag: DieBag): number;
 }

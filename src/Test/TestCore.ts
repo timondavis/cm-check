@@ -1,4 +1,5 @@
 import { DieBag } from "../Die/DieBag";
+import { expect } from "chai";
 
 export class TestCore {
 
@@ -60,5 +61,72 @@ export class TestCore {
 
 
         bag.add( count, sides );
+    }
+
+    /**
+     * Generate an array of 2-element number arrays, holding the [0]count and [1]sides
+     *
+     * @returns {number[][]}
+     */
+    public static generateDieDefinitions() {
+
+        let sides : number;
+        let dieDefs : number[][] = [];
+        let sidesUsed : number[] = [];
+
+        for ( let defCounter = 0 ; defCounter < TestCore.randomInt( 100 ) ; defCounter++ ){
+
+            do {
+                sides = TestCore.randomInt();
+            } while( sidesUsed.indexOf( sides ) != -1 );
+
+            sidesUsed.push( sides );
+
+            dieDefs.push( [TestCore.randomInt(), sides ]);
+        }
+
+        return dieDefs;
+    }
+
+    /**
+     * Apply the defined die in the die definitions to a DieBag
+     *
+     * @param {number[][]} dieDefinitions
+     * @param {DieBag} bag
+     */
+    public static addDieToBagWithDefinitions( dieDefinitions: number[][], bag : DieBag ) {
+
+        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
+
+            bag.add( dieDefinitions[defCounter][0], dieDefinitions[defCounter][1] );
+        }
+    }
+
+    /**
+     * Validate the counts of each type of die in the DieBag match up with whats expected in the supplied die
+     * definitions.
+     * @param {number[][]} dieDefinitions
+     * @param {DieBag} bag
+     */
+    public static validateCountsOnBagWithDefinitions( dieDefinitions : number[][], bag : DieBag ) {
+
+        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
+
+            expect( bag.getDieWithSides( dieDefinitions[defCounter][1] ) ).to.have.lengthOf( dieDefinitions[defCounter][0] );
+        }
+    }
+
+    public static countTotalValuesOfDieInBag( bag: DieBag ) : number {
+
+        let total = 0;
+        Object.keys( bag.dieMap ).forEach( sides => {
+
+            for ( let dieIndex = 0; dieIndex < bag.dieMap[ sides ].length; dieIndex++ ) {
+
+                total += bag.dieMap[ sides ][ dieIndex ].getValue();
+            }
+        });
+
+        return total;
     }
 }

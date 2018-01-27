@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import { Check, CheckReport } from "../../Check/Check";
 import { ResultModifier } from "../../Check/Modifier/ResultModifier";
+import { TestCore } from "../TestCore";
 
 describe( 'Check', () => {
 
@@ -18,53 +19,51 @@ describe( 'Check', () => {
 
     it( 'should allow for modifers to be added', () => {
 
-        c = new MyCheck( 10 );
-        c.getDieBag().add( 1, 20, 9 );
-        c.getDieBag().dieMap['20'][0].setLock( true );
-        c.addModifier( new ResultModifier( 'result-boost', 5 ) );
+        let sides = TestCore.randomInt();
+        let dieValue = TestCore.randomInt( sides );
+        let modValue = TestCore.randomInt();
+
+        c = new MyCheck( TestCore.randomInt() );
+        c.getDieBag().add( TestCore.randomInt(), sides, dieValue );
+        c.addModifier( new ResultModifier( 'result-boost', modValue ));
 
         let modifiers = c.getModifiers();
 
-        expect ( modifiers[0].getName() == 'result-boost' );
+        expect( modifiers[0].getName()).to.be.equal( 'result-boost' );
+        expect( modifiers[0].getValue()).to.be.equal( modValue );
     });
 
     it ( 'should report pass/fail accurately', () => {
 
-        c = new MyCheck( 10 );
+        let target = TestCore.randomInt();
 
-        c.setResult( 9 );
+        c = new MyCheck( target );
+
+        c.setResult( target - 1 );
         expect( c.isPass() ).to.be.false;
 
-        c.setResult( 10 );
+        c.setResult( target );
         expect( c.isPass() ).to.be.true;
 
-        c.setResult( 11 );
-        expect( c.isPass() ).to.be.true;
-
-        c.setTarget( 20 );
-
-        c.setResult( 19 );
-        expect( c.isPass() ).to.be.false;
-
-        c.setResult( 20 );
-        expect( c.isPass() ).to.be.true;
-
-        c.setResult( 21 );
+        c.setResult( target + 1 );
         expect( c.isPass() ).to.be.true;
     });
 
     it ( 'should retain its original roll value, even after its official result has been modified', () => {
 
-       c = new MyCheck( 10 );
-       c.getDieBag().add( 5, 20 );
-       c.check();
+        let target = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+        let count = TestCore.randomInt();
+        let boostResultValueBy = TestCore.randomInt();
 
-       let originalResult = c.getDieBag().getTotal();
+        c = new MyCheck( target );
+        c.getDieBag().add( sides, count );
+        c.check();
 
-       c.setResult( c.getResult() + 15 );
+        let originalResult = c.getDieBag().getTotal();
 
-       expect( c.getRawRollResult() ).to.be.equal( originalResult );
-
+        c.setResult( c.getResult() + boostResultValueBy );
+        expect( c.getRawRollResult() ).to.be.equal( originalResult );
     });
 
     it ( 'should do a new roll with each check execution, and should change value within 5 rolls with 5d20', () => {
@@ -87,39 +86,33 @@ describe( 'Check', () => {
 
     it( 'should deliver accurate status reporting', () => {
 
-        c = new MyCheck( 10 );
         let total = 0;
+        let count = TestCore.randomInt();
+        let target = TestCore.randomInt();
+        let modifierValue = TestCore.randomInt();
+        let dieDefinitions = TestCore.generateDieDefinitions();
         let report : CheckReport;
 
-        c.setTarget( 36 );
-        c.getDieBag().add( 6, 4 );
-        c.getDieBag().add( 6, 6 );
-        c.getDieBag().add( 6, 8 );
-        c.getDieBag().add( 6, 10 );
-        c.getDieBag().add( 6, 12 );
-        c.getDieBag().add( 6, 20 );
+        c = new MyCheck( target );
 
-        c.addModifier( new ResultModifier( 'M1', 1 ));
-
+        TestCore.addDieToBagWithDefinitions( dieDefinitions, c.getDieBag() );
+        c.addModifier( new ResultModifier( 'M1', modifierValue ));
         c.check();
 
         report = c.report( false );
 
-        Object.keys( report.dieBag ).forEach( ( dieSides:string ) => {
+        for ( let definitionIndex = 0 ; definitionIndex < dieDefinitions.length ; definitionIndex++ ){
 
-            for ( let dieIndex = 0 ; dieIndex < report.dieBag.dieMap[dieSides] ; dieIndex++ ) {
-
-            }
-        });
+            expect( report.dieBag.dieMap[ String( dieDefinitions[ definitionIndex ][1]) ] )
+                .to.have.lengthOf( dieDefinitions[ definitionIndex ][0] );
+        }
 
         expect( report.isPass ).to.be.true;
-        expect( report.target ).to.be.equal( 36 );
-
-
-
+        expect( report.target ).to.be.equal( target );
+        expect( report.modifiers ).has.length( 1 );
+        expect( report.modifiers[0].getName() ).to.be.equal( 'M1' );
+        expect( report.modifiers[0].getValue() ).to.be.equal( modifierValue );
+        expect( report.result ).to.be.equal( TestCore.countTotalValuesOfDieInBag( c.getDieBag() ) );
 
     });
-
-
-
 });
