@@ -14,6 +14,7 @@ describe( 'Check', () => {
     }
 
     it( 'should not be directly instantiable', () => {
+
         expect( () => new Check() ).to.throw();
     });
 
