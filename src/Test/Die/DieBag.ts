@@ -11,9 +11,11 @@ describe( 'DieBag', () => {
 
         bag = new DieBag();
 
-        bag.add( 1, 6 );
-        expect( bag.report() ).to.have.ownProperty( '6' );
-        expect( bag.report()['6'] ).has.lengthOf( 1 );
+        let count = TestCore.randomInt( 100 );
+        let sides = TestCore.randomInt( 100 );
+
+        bag.add( count, sides );
+        expect( bag.getSetOfSidedDie( sides ) ).has.lengthOf( count );
     });
 
     it( 'should facilitate adding dice en masse via import of a DieBag', () => {
@@ -21,23 +23,20 @@ describe( 'DieBag', () => {
         bag = new DieBag();
         let mergeBag = new DieBag();
 
-        bag.add( 2, 6 );
-        bag.add( 4, 12 );
+        let bagAdds : { [key:string] : number } = {};
 
-        mergeBag.add( 5, 2 );
-        mergeBag.add( 2, 6 );
-        mergeBag.add( 7, 12 );
+        for ( let bagAddsLoop = 0 ; bagAddsLoop < TestCore.randomInt( 10 ) ; bagAddsLoop++ ){
+
+            TestCore.trackRandomAddedDie( bagAdds, bag );
+            TestCore.trackRandomAddedDie( bagAdds, mergeBag );
+        }
 
         bag.addBag( mergeBag );
 
-        expect( bag.report() ).to.have.ownProperty( '2' );
-        expect( bag.report()['2'] ).has.lengthOf( 5 );
+        Object.keys( bagAdds ).forEach( ( dieSides : string ) => {
 
-        expect( bag.report() ).to.have.ownProperty( '6' );
-        expect( bag.report()['6'] ).has.lengthOf( 4 );
-
-        expect( bag.report() ).to.have.ownProperty( '12' );
-        expect( bag.report()['12'] ).has.lengthOf( 11 );
+            expect( bag.getSetOfSidedDie( dieSides ) ).to.have.lengthOf( bagAdds[dieSides] );
+        });
     });
 
     it( 'should retain die values when importing DieBag', () => {
