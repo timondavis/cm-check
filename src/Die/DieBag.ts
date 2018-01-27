@@ -187,7 +187,7 @@ export class DieBag {
      * @param {number | string} sides
      * @returns {Die[]}
      */
-    public getSetOfSidedDie( sides : number | string ) : Die[] {
+    public getDieWithSides( sides : number | string ) : Die[] {
 
         if ( isNaN( Number( sides ) ) )  { throw "Non-numerical value requested"; }
         sides = String( Math.floor( Number( sides ) ) );

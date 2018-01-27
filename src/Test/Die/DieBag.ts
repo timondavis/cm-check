@@ -11,11 +11,11 @@ describe( 'DieBag', () => {
 
         bag = new DieBag();
 
-        let count = TestCore.randomInt( 100 );
-        let sides = TestCore.randomInt( 100 );
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
 
         bag.add( count, sides );
-        expect( bag.getSetOfSidedDie( sides ) ).has.lengthOf( count );
+        expect( bag.getDieWithSides( sides ) ).has.lengthOf( count );
     });
 
     it( 'should facilitate adding dice en masse via import of a DieBag', () => {
@@ -25,7 +25,7 @@ describe( 'DieBag', () => {
 
         let bagAdds : { [key:string] : number } = {};
 
-        for ( let bagAddsLoop = 0 ; bagAddsLoop < TestCore.randomInt( 10 ) ; bagAddsLoop++ ){
+        for ( let bagAddsLoop = 0 ; bagAddsLoop < TestCore.randomInt() ; bagAddsLoop++ ){
 
             TestCore.trackRandomAddedDie( bagAdds, bag );
             TestCore.trackRandomAddedDie( bagAdds, mergeBag );
@@ -35,7 +35,7 @@ describe( 'DieBag', () => {
 
         Object.keys( bagAdds ).forEach( ( dieSides : string ) => {
 
-            expect( bag.getSetOfSidedDie( dieSides ) ).to.have.lengthOf( bagAdds[dieSides] );
+            expect( bag.getDieWithSides( dieSides ) ).to.have.lengthOf( bagAdds[dieSides] );
         });
     });
 
@@ -44,54 +44,83 @@ describe( 'DieBag', () => {
         bag = new DieBag();
         let mergeBag = new DieBag();
 
-        mergeBag.add( 3, 6 );
-        let dieValues = mergeBag.report()['6'];
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+
+        mergeBag.add( count, sides );
+        let dieValues = mergeBag.getDieWithSides( sides );
 
         bag.addBag( mergeBag );
-        let mergedValues = bag.report()['6'];
+        let mergedValues = bag.getDieWithSides( sides );
 
-        for( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
+        for( let loopCounter = 0 ; loopCounter < count ; loopCounter++ ) {
 
             expect( dieValues[loopCounter].getValue() ).to.be.equal( mergedValues[loopCounter].getValue() );
         }
+
     });
 
     it( 'should allow a preset die value to be defined when adding dice to the bag', () => {
 
         bag = new DieBag();
 
-        bag.add( 3, 1000, 77 );
-        expect( bag.report() ).to.have.ownProperty( '1000' );
-        expect( bag.report()['1000'] ).has.lengthOf( 3 );
-        expect( bag.report()['1000'][0].getValue() ).to.be.equal( 77 );
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+        let value = TestCore.randomInt( sides );
+        let dieValues = [];
+
+        bag.add( count, sides, value );
+
+        dieValues = bag.getDieWithSides( sides );
+        expect( dieValues).to.have.lengthOf( count );
+
+        for( let dieIndex = 0 ; dieIndex < count ; dieIndex++ ) {
+
+            expect( dieValues[dieIndex].getValue() ).to.be.equal( value );
+        }
     });
 
     it( 'should remove a single die set from a bag successfully' , () => {
 
+        let addedDie = TestCore.randomInt();
+        let dieSides = TestCore.randomInt();
+        let removedDie = TestCore.randomInt( addedDie - 1, true );
+
         bag = new DieBag();
 
-        bag.add( 5, 4 );
-        bag.remove( 3, 4 );
+        bag.add( addedDie, dieSides );
+        bag.remove( removedDie , dieSides );
 
-        expect( bag.report() ).to.have.ownProperty( '4' );
-        expect( bag.report()['4'] ).has.lengthOf( 2 );
+        expect( bag.getDieWithSides( dieSides ) ).has.lengthOf( addedDie - removedDie );
     });
 
     it( 'should allow die to removed en masse by supplying a DieBag', () => {
 
-        bag = new DieBag();
+
+        let sides : number;
+        let addCount : number;
+        let removeCount : number;
+        let tracker : { [key:string] : number } = {};
+
         let minusBag = new DieBag();
+        bag = new DieBag();
 
-        bag.add( 4, 12 );
-        bag.add( 2, 6 );
+        for ( let loopCounter = 0 ; loopCounter < TestCore.randomInt() ; loopCounter++ ) {
 
-        minusBag.add( 2, 12 );
-        minusBag.add( 1, 6 );
+            sides = TestCore.randomInt();
+            addCount = TestCore.randomInt();
+            removeCount = TestCore.randomInt( addCount );
+
+            TestCore.trackRandomAddedDie( tracker, bag, '+', addCount, sides );
+            TestCore.trackRandomAddedDie( tracker, minusBag, '-', removeCount, sides );
+        }
 
         bag.removeBag( minusBag, false );
 
-        expect( bag.report()['12'] ).has.lengthOf( 2 );
-        expect( bag.report()['6'] ).has.lengthOf( 1 );
+        Object.keys( tracker ).forEach( ( dieSides : string ) => {
+
+            expect( bag.getDieWithSides( dieSides ) ).to.have.lengthOf( tracker[dieSides] );
+        });
     });
 
     it( 'should change the value of the total die value after the after its been rolled', () => {
@@ -183,8 +212,8 @@ describe( 'DieBag', () => {
 
         bag.roll();
 
-        expect( bag.getSetOfSidedDie( sides1 ).length ).is.equal( count1 );
-        expect( bag.getSetOfSidedDie( sides2 ).length ).is.equal( count2 );
-        expect( bag.getSetOfSidedDie( sides3 ).length ).is.equal( count3 );
+        expect( bag.getDieWithSides( sides1 ).length ).is.equal( count1 );
+        expect( bag.getDieWithSides( sides2 ).length ).is.equal( count2 );
+        expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
     });
 });

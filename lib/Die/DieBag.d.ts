@@ -96,7 +96,7 @@ export declare class DieBag {
      * @param {number | string} sides
      * @returns {Die[]}
      */
-    getSetOfSidedDie(sides: number | string): Die[];
+    getDieWithSides(sides: number | string): Die[];
     private rollCollection();
     private refreshDieResults();
     private strictRemoveBag(bag);
