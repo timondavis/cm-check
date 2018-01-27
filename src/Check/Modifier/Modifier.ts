@@ -6,7 +6,7 @@ export abstract class Modifier {
 
     abstract getType(): string;
 
-    protected phase: string = 'before';
+    protected phase: string = 'after';
 
     public constructor( protected name: string, protected value: string | number | string[] | number[] ) { }
 

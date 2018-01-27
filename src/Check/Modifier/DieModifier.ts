@@ -39,6 +39,4 @@ export class DieModifier extends Modifier {
             check.getDieBag().remove( dieDirective.value[0], dieDirective.value[1] );
         }
     }
-
-
 }
