@@ -25,7 +25,7 @@ describe( 'DieBag', () => {
 
         let bagAdds : { [key:string] : number } = {};
 
-        for ( let bagAddsLoop = 0 ; bagAddsLoop < TestCore.randomInt() ; bagAddsLoop++ ){
+        for ( let bagAddsLoop = 0 ; bagAddsLoop < TestCore.randomInt( 100 ) ; bagAddsLoop++ ){
 
             TestCore.trackRandomAddedDie( bagAdds, bag );
             TestCore.trackRandomAddedDie( bagAdds, mergeBag );
@@ -127,7 +127,10 @@ describe( 'DieBag', () => {
 
         bag = new DieBag();
 
-        bag.add( 20, 8 );
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+
+        bag.add( count, sides );
         let oldResults = bag.getTotal();
 
         for( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
@@ -141,56 +144,40 @@ describe( 'DieBag', () => {
 
     it ( 'should not cause locked die to be rerolled', () => {
 
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+
         bag = new DieBag();
 
-        bag.add( 12, 100 );
-        bag.dieMap['100'][0].setLock( true );
-        let legacyValue = bag.dieMap['100'][0].getValue();
+        bag.add( count, sides );
+        bag.dieMap[String( sides )][0].setLock( true );
+        let legacyValue = bag.dieMap[String( sides )][0].getValue();
 
-        for ( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
+        for ( let loopCounter = 0 ; loopCounter < 10 ; loopCounter++ ) {
 
             bag.roll();
-            if ( legacyValue != bag.dieMap['100'][0].getValue() ) { break; }
+            if ( legacyValue != bag.dieMap[String( sides )][0].getValue() ) { break; }
         }
 
-        expect( legacyValue ).to.be.equal( bag.dieMap['100'][0].getValue() );
+        expect( legacyValue ).to.be.equal( bag.dieMap[String( sides )][0].getValue() );
     });
 
     it( 'should provide an accurate report on the state of all die, sorted by type', () => {
 
         bag = new DieBag();
 
-        bag.add( 4, 8 );
-        bag.add( 8,  6 );
-        bag.add( 10, 20 );
-        bag.add( 5, 4 );
-        bag.add( 7, 12 );
-        bag.add( 2, 8 );
+        let dieDefinitions : number[][] = [];
+        let total : number;
+        let reportedTotal : number;
 
+        dieDefinitions = generateDieDefinitions();
+
+        addDieToBagWithDefinitions( dieDefinitions, bag );
         bag.roll();
+        validateCountsOnBagWithDefinitions( dieDefinitions, bag );
 
-        let reportedTotal = bag.getTotal();
-
-        expect( bag.dieMap['8']  ).has.lengthOf( 6  );
-        expect( bag.dieMap['6']  ).has.lengthOf( 8  );
-        expect( bag.dieMap['20'] ).has.lengthOf( 10 );
-        expect( bag.dieMap['4']  ).has.lengthOf( 5  );
-        expect( bag.dieMap['12'] ).has.lengthOf( 7  );
-
-        let total = 0;
-
-        for ( let loopCounter = 0 ; loopCounter < 3 ; loopCounter++ ) {
-
-            total = 0;
-
-            Object.keys( bag.dieMap ).forEach( sides => {
-
-                for ( let dieIndex  = 0 ; dieIndex < bag.dieMap[sides].length ; dieIndex++ ){
-
-                    total += bag.dieMap[sides][dieIndex].getValue();
-                }
-            });
-        }
+        reportedTotal = bag.getTotal();
+        total = countTotalValuesOfDieInBag( bag );
 
         expect( reportedTotal ).to.be.equal( total );
     });
@@ -216,4 +203,55 @@ describe( 'DieBag', () => {
         expect( bag.getDieWithSides( sides2 ).length ).is.equal( count2 );
         expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
     });
+
+    function generateDieDefinitions() {
+
+        let sides : number;
+        let dieDefs : number[][] = [];
+        let sidesUsed : number[] = [];
+
+        for ( let defCounter = 0 ; defCounter < TestCore.randomInt( 20 ) ; defCounter++ ){
+
+
+            do {
+                sides = TestCore.randomInt();
+            } while( sidesUsed.indexOf( sides ) != -1 );
+
+            sidesUsed.push( sides );
+
+            dieDefs.push( [TestCore.randomInt(), sides ]);
+        }
+
+        return dieDefs;
+    }
+
+    function addDieToBagWithDefinitions( dieDefinitions: number[][], bag : DieBag ) {
+
+        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
+
+            bag.add( dieDefinitions[defCounter][0], dieDefinitions[defCounter][1] );
+        }
+    }
+
+    function validateCountsOnBagWithDefinitions( dieDefinitions : number[][], bag : DieBag ) {
+
+        for ( let defCounter = 0 ; defCounter < dieDefinitions.length ; defCounter++ ) {
+
+            expect( bag.getDieWithSides( dieDefinitions[defCounter][1] ) ).to.have.lengthOf( dieDefinitions[defCounter][0] );
+        }
+    }
+
+    function countTotalValuesOfDieInBag( bag: DieBag ) : number {
+
+        let total = 0;
+        Object.keys( bag.dieMap ).forEach( sides => {
+
+            for ( let dieIndex = 0; dieIndex < bag.dieMap[ sides ].length; dieIndex++ ) {
+
+                total += bag.dieMap[ sides ][ dieIndex ].getValue();
+            }
+        });
+
+        return total;
+    }
 });

@@ -10,8 +10,4 @@ export declare class DieModifier extends Modifier {
         directive: string;
         value: number[];
     }): void;
-    protected static decodeDieString(dieCode: string): {
-        directive: string;
-        value: number[];
-    };
 }

@@ -97,6 +97,10 @@ export declare class DieBag {
      * @returns {Die[]}
      */
     getDieWithSides(sides: number | string): Die[];
+    static decodeDieString(dieCode: string): {
+        directive: string;
+        value: number[];
+    };
     private rollCollection();
     private refreshDieResults();
     private strictRemoveBag(bag);
