@@ -204,6 +204,4 @@ describe( 'DieBag', () => {
         expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
     });
 
-
-
 });
