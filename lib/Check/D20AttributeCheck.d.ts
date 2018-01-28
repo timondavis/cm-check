@@ -13,6 +13,6 @@ export declare class D20AttributeCheck extends Check {
      * @param {number} attributeValue
      */
     setAttributeValue(attributeValue: number): void;
-    protected setBaseDieBag(): void;
+    protected setCheckDie(): void;
     protected static translateAttributeValue(value: number): number;
 }

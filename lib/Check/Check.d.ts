@@ -99,7 +99,7 @@ export declare abstract class Check {
     /**
      * Set a new DieBag on this check.
      */
-    protected abstract setBaseDieBag(): void;
+    protected abstract setCheckDie(): void;
 }
 export declare class CheckReport {
     isPass: boolean;

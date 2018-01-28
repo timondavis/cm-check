@@ -20,7 +20,7 @@ export abstract class Check {
     public constructor( protected target: number = 0 ) {
 
         this.dieBag = new DieBag();
-        this.setBaseDieBag();
+        this.setCheckDie();
     }
 
     /**
@@ -199,7 +199,7 @@ export abstract class Check {
     /**
      * Set a new DieBag on this check.
      */
-    protected abstract setBaseDieBag() : void;
+    protected abstract setCheckDie() : void;
 }
 
 export class CheckReport {

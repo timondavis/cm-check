@@ -10,7 +10,7 @@ describe( 'Check', () => {
 
     class MyCheck extends Check {
         getType(): string { return 'MyCheck' }
-        protected setBaseDieBag(): void {}
+        protected setCheckDie(): void {}
     }
 
     it( 'should not be directly instantiable', () => {
