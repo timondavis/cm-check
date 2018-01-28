@@ -5,6 +5,7 @@ import { CheckExecutor } from "../../Check/CheckExecutor";
 import { Check } from "../../Check/Check";
 import { TestCore } from "../TestCore";
 import { DieBag } from "../../Die/DieBag";
+import { ResultModifier } from "../../Check/Modifier/ResultModifier";
 
 describe( 'DieModifier', () => {
 
@@ -151,4 +152,9 @@ describe( 'DieModifier', () => {
             .to.have.length( dieAddedCount - dieRemovedCount );
     });
 
+    it( 'should report its typename', () => {
+
+        let modifier = new DieModifier( 'Name', TestCore.randomInt() );
+        expect( modifier.getType() ).to.be.equal( 'die' );
+    });
 });
