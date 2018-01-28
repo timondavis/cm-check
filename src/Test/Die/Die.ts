@@ -7,6 +7,12 @@ describe( 'Die', () => {
 
     let die: Die = new Die( 20 );
 
+    it( 'should prevent invalid die from being created', () => {
+
+        expect( () => new Die( 0 ) ).to.throw;
+        expect( () => new Die( -1) ).to.throw;
+    });
+
     it( 'should be created with any number of sides', () => {
 
         let randomSides : number;

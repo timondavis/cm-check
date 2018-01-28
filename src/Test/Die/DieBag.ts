@@ -39,6 +39,35 @@ describe( 'DieBag', () => {
         });
     });
 
+    it( 'should not allow adding or removing negative amounts of die', () => {
+
+        bag = new DieBag();
+
+        expect( () => bag.add( TestCore.randomInt() * -1, TestCore.randomInt() )).to.throw;
+        expect( () => bag.remove( TestCore.randomInt() * -1 , TestCore.randomInt() )).to.throw;
+    });
+
+    it( 'should not allow less than 0 of any type of die to exist in the bag', () => {
+
+        bag = new DieBag();
+
+        let sides = TestCore.randomInt();
+        let count = TestCore.randomInt();
+
+        bag.remove( sides, count );
+        expect( bag.getDieWithSides( sides )).to.have.length( 0 );
+    });
+
+    it( 'relies on Die class to prevent invalid die additions or removals from being processed', () => {
+
+        bag = new DieBag();
+
+        expect( () => bag.add( TestCore.randomInt(), 0 )).to.throw;
+        expect( () => bag.add( TestCore.randomInt(), -1 )).to.throw;
+        expect( () => bag.remove( TestCore.randomInt(), 0 )).to.throw;
+        expect( () => bag.remove( TestCore.randomInt(), -1 )).to.throw;
+    });
+
     it( 'should retain die values when importing DieBag', () => {
 
         bag = new DieBag();
@@ -224,6 +253,9 @@ describe( 'DieBag', () => {
         let stringifiedDie = String( count ) + 'd' + String( sides );
 
         expect( DieBag.encodeDieString( count, sides ) ).to.be.equal( stringifiedDie );
+
+        count *= -1;
+        expect( DieBag.encodeDieString( count, sides ) ).to.be.equal( '-' + stringifiedDie );
     });
 
     it( 'provides a static service decoding die strings', () => {
@@ -234,6 +266,21 @@ describe( 'DieBag', () => {
 
         expect( DieBag.decodeDieString( stringifiedDie ).value[0] ).to.be.equal( count );
         expect( DieBag.decodeDieString( stringifiedDie ).value[1] ).to.be.equal( sides );
+        expect( DieBag.decodeDieString( stringifiedDie ).directive ).to.be.equal( 'add' );
+
+        expect( DieBag.decodeDieString( '-' + stringifiedDie ).value[0] ).to.be.equal( count );
+        expect( DieBag.decodeDieString( '-' + stringifiedDie ).value[1] ).to.be.equal( sides );
+        expect( DieBag.decodeDieString( '-' + stringifiedDie ).directive ).to.be.equal( 'remove' );
+    });
+
+    it ( 'should prevent against invalid die encoding/decoding attempts', () => {
+
+        expect( () => DieBag.encodeDieString( TestCore.randomInt(), 0  )).to.throw;
+        expect( () => DieBag.encodeDieString( TestCore.randomInt(), -5 )).to.throw;
+
+        expect( () => DieBag.decodeDieString( 'fred' ) ).to.throw;
+        expect( () => DieBag.decodeDieString( '10d0' ) ).to.throw;
+        expect( () => DieBag.decodeDieString( '10d-1' ) ).to.throw;
     });
 
 });

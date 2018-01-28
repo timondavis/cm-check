@@ -4,6 +4,7 @@ import { DieModifier } from "../../Check/Modifier/DieModifier";
 import { CheckExecutor } from "../../Check/CheckExecutor";
 import { Check } from "../../Check/Check";
 import { TestCore } from "../TestCore";
+import { DieBag } from "../../Die/DieBag";
 
 describe( 'DieModifier', () => {
 
@@ -31,7 +32,7 @@ describe( 'DieModifier', () => {
 
         c.getDieBag().add( originalDieCount, originalDieSides );
 
-        c.addModifier( new DieModifier( 'Die Modifier', String( newDieCount ) + 'd' + String( newDieSides )));
+        c.addModifier( new DieModifier( 'Die Modifier', DieBag.encodeDieString( newDieCount, newDieSides )));
         CE.on( c.getType() + '_roll', ( check : Check ) => {
             expect( check.getDieBag().getDieWithSides( newDieSides ) ).to.have.length( newDieCount );
         });
@@ -45,7 +46,7 @@ describe( 'DieModifier', () => {
         let originalDieCount = TestCore.randomInt();
         let originalDieSides = TestCore.randomInt();
 
-        let originalDieString = String( originalDieCount ) + 'd' + String( originalDieSides );
+        let originalDieString = DieBag.encodeDieString( originalDieCount, originalDieSides );
         let m = new DieModifier( 'Die Modifier', [originalDieString] );
         m.setPhase( 'after' );
 
@@ -97,8 +98,7 @@ describe( 'DieModifier', () => {
 
         // Create a check and apply modifier with single value
         c = new MyCheck( TestCore.randomInt() );
-        c.addModifier( new DieModifier( 'Die Modifier',
-            String( singleDieCount ) + 'd' + String( singleDieSides )
+            c.addModifier( new DieModifier( 'Die Modifier', DieBag.encodeDieString( singleDieCount, singleDieSides )
         ));
 
         CE.execute( c );

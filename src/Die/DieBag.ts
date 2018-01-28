@@ -20,6 +20,8 @@ export class DieBag {
      */
     public add( count: number , sides: number, value: number = -1 ) : DieBag {
 
+        if ( count < 0 ) { throw( "Cannot add negative die amounts.  Use .remove() instead" ); }
+
         if ( ! this.isDieIndexExists( sides ) ) { this.addNewDieIndex( sides ) }
 
         for ( let index = 0 ; index < count ; index++ ) {
@@ -70,6 +72,8 @@ export class DieBag {
      * @return {DieBag}
      */
     public remove ( count: number, sides: number ) : DieBag {
+
+        if ( count < 0 ) { throw "Cannot remove negative amounts of die.  Use .add() instead" }
 
         if ( ! this.isDieIndexExists( sides ) ) { return this; }
 
@@ -217,12 +221,20 @@ export class DieBag {
         count = Number( dieDefinition[0] );
         sides = Number( dieDefinition[1] );
 
+        if ( sides < 1 ) { throw ( "Die must have at least one side" ); }
+
         if ( isNaN( count ) || isNaN( sides ) ) { throw ("Invalid die definition string: " + dieCode ); }
 
         return { directive: directive, value: [ count, sides ] };
     }
 
     public static encodeDieString( count : number, sides : number ) : string {
+
+        if ( isNaN( count ) || isNaN(  sides ) ) {
+            throw( "Invalid Die Encoding request: count=" + String( count ) + " sides=" + String( sides ));
+        }
+
+        if ( sides < 1 ) { throw ( "Die must have at least one side" ); }
 
         return String( count ) + 'd' + String( sides );
     }

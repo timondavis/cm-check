@@ -7,6 +7,7 @@ export class Die {
 
     public constructor( public sides: number ) {
 
+        if ( sides < 1 ) { throw "Die must have at least one side"; }
         this.roll();
     }
 
