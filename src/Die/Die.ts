@@ -59,9 +59,9 @@ export class Die {
      * @param {boolean} locked
      * @returns {Die}
      */
-    public setLock( locked : boolean = true ) : Die{
+    public lock( setLockTo : boolean = true ) : Die{
 
-        this.locked = locked;
+        this.locked = setLockTo;
         return this;
     }
 
