@@ -222,6 +222,11 @@ export class DieBag {
         return { directive: directive, value: [ count, sides ] };
     }
 
+    public static encodeDieString( count : number, sides : number ) : string {
+
+        return String( count ) + 'd' + String( sides );
+    }
+
     private rollCollection() {
 
         let self = this;
@@ -238,6 +243,7 @@ export class DieBag {
             })
         });
     }
+
 
     // TODO IMPLEMENT!  IF SEARCH IS A THING WE SUPPORT, THIS MUST BE IN PLACE
     private refreshDieResults() {

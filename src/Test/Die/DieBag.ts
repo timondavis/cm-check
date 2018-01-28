@@ -217,4 +217,23 @@ describe( 'DieBag', () => {
 
     });
 
+    it( 'provides a static service encoding die strings', () => {
+
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+        let stringifiedDie = String( count ) + 'd' + String( sides );
+
+        expect( DieBag.encodeDieString( count, sides ) ).to.be.equal( stringifiedDie );
+    });
+
+    it( 'provides a static service decoding die strings', () => {
+
+        let count = TestCore.randomInt();
+        let sides = TestCore.randomInt();
+        let stringifiedDie = String( count ) + 'd' + String( sides );
+
+        expect( DieBag.decodeDieString( stringifiedDie ).value[0] ).to.be.equal( count );
+        expect( DieBag.decodeDieString( stringifiedDie ).value[1] ).to.be.equal( sides );
+    });
+
 });

@@ -29,7 +29,6 @@ describe( 'DieModifier', () => {
 
         c = new MyCheck( TestCore.randomInt() );
 
-
         c.getDieBag().add( originalDieCount, originalDieSides );
 
         c.addModifier( new DieModifier( 'Die Modifier', String( newDieCount ) + 'd' + String( newDieSides )));

@@ -101,6 +101,7 @@ export declare class DieBag {
         directive: string;
         value: number[];
     };
+    static encodeDieString(count: number, sides: number): string;
     private rollCollection();
     private refreshDieResults();
     private strictRemoveBag(bag);
