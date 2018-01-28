@@ -73,7 +73,7 @@ describe( 'Die', () => {
 
         let originalValue = die.roll().getValue();
 
-        die.setLock( true );
+        die.lock();
 
         for ( let loopCount = 0 ; loopCount < 5 ; loopCount++ ) {
 
@@ -87,12 +87,12 @@ describe( 'Die', () => {
        die = new Die( 10000 );
 
        let originalValue = die.getValue();
-       die.setLock( true );
+       die.lock();
        die.roll();
 
        expect( die.getValue() ).to.be.equal( originalValue );
 
-       die.setLock( false );
+       die.lock( false );
 
        for ( let loopCounter = 0 ; loopCounter < 5 ; loopCounter++ ) {
 
@@ -110,10 +110,10 @@ describe( 'Die', () => {
 
         expect( die.isLocked() ).to.be.false;
 
-        die.setLock( true );
+        die.lock();
         expect( die.isLocked() ).to.be.true;
 
-        die.setLock( false );
+        die.lock( false );
         expect( die.isLocked() ).to.be.false;
     });
 });

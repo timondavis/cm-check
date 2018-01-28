@@ -179,7 +179,7 @@ describe( 'DieBag', () => {
         bag = new DieBag();
 
         bag.add( count, sides );
-        bag.dieMap[String( sides )][0].setLock( true );
+        bag.dieMap[String( sides )][0].lock();
         let legacyValue = bag.dieMap[String( sides )][0].getValue();
 
         for ( let loopCounter = 0 ; loopCounter < 10 ; loopCounter++ ) {
