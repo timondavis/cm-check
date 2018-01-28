@@ -3,33 +3,13 @@ import { ResultModifier } from "./Modifier/ResultModifier";
 
 export class D20AttributeCheck extends Check {
 
-    public constructor( protected attributeValue : number, target: number, protected attributeName : string = '' ) {
+    public constructor( target: number = 0, protected attributeValue : number = 0, protected name: string = 'Natural' +
+    ' Attribute Modifier' ) {
 
         super( target );
 
-        if ( ! this.attributeName ) { this.attributeName = 'D20Attribute'; }
-
-        this.addModifier( new ResultModifier( this.attributeName,
+        this.addModifier( new ResultModifier( name,
             D20AttributeCheck.translateAttributeValue( attributeValue ) ) );
-
-    }
-
-    /**
-     * Set the name of the attribute being checked against
-     * @param {string} name
-     */
-    public setAttributeName( name : string ) {
-
-        this.attributeName = name;
-    }
-
-    /**
-     * Get the name of the attribute being checked against
-     * @returns {string | undefined}
-     */
-    public getName() {
-
-        return this.attributeName;
     }
 
     /**
@@ -38,7 +18,28 @@ export class D20AttributeCheck extends Check {
      */
     public getType() : string {
 
-        return this.attributeName + 'Attribute';
+        return 'd20-attribute'
+    }
+
+    /**
+     * Update the attribute being checked against
+     * @param {number} attributeValue
+     */
+    // @TODO Brute force is not efficient, sort then search
+    public setAttributeValue( attributeValue : number ) {
+
+        this.attributeValue = attributeValue;
+
+        let modifiers = this.getModifiers();
+
+        for ( let modifierIndex = 0 ; modifierIndex < modifiers.length ; modifierIndex++ ) {
+
+            if ( modifiers[modifierIndex].getName() == this.name ) {
+
+                modifiers[modifierIndex].setValue( D20AttributeCheck.translateAttributeValue( attributeValue ) );
+                break;
+            }
+        }
     }
 
     protected setBaseDieBag(): void {
