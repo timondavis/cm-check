@@ -114,6 +114,92 @@ describe( 'Check', () => {
         expect( report.modifiers[0].getName() ).to.be.equal( 'M1' );
         expect( report.modifiers[0].getValue() ).to.be.equal( modifierValue );
         expect( report.result ).to.be.equal( TestCore.countTotalValuesOfDieInBag( c.getDieBag() ) );
+    });
 
+    it( 'should allow >, <, >=, and <= as test conditions', () => {
+
+        let test1BigNumber = TestCore.randomInt() + 100;
+        let test1SmallNumber = TestCore.randomInt( test1BigNumber - 1);
+
+        let test2BigNumber = TestCore.randomInt() + 100;
+        let test2SmallNumber = TestCore.randomInt( test2BigNumber - 1);
+
+        let test3BigNumber = TestCore.randomInt() + 100;
+        let test3SmallNumber = TestCore.randomInt( test3BigNumber - 1);
+
+        let test4BigNumber = TestCore.randomInt() + 100;
+        let test4SmallNumber = TestCore.randomInt( test4BigNumber - 1);
+
+        // Test 1 : >
+        c = new MyCheck( test1BigNumber );
+        c.setTestCondition( '>' );
+        c.setResult( test1SmallNumber );
+        expect( c.isPass() ).to.be.false;
+
+        c.setTarget( test1SmallNumber );
+        c.setResult( test1BigNumber );
+        expect( c.isPass() ).to.be.true;
+
+        // Test 2 : >=
+        c = new MyCheck( test2BigNumber );
+        c.setTestCondition( '>=' );
+        c.setResult( test2SmallNumber );
+        expect( c.isPass() ).to.be.false;
+
+        c.setResult( test2BigNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setTarget( test2SmallNumber );
+        c.setResult( test2BigNumber );
+        expect( c.isPass() ).to.be.true;
+
+        // Test 3 : <
+        c = new MyCheck( test3BigNumber );
+        c.setTestCondition( '<' );
+        c.setResult( test3SmallNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setTarget( test3SmallNumber );
+        c.setResult( test3BigNumber );
+        expect( c.isPass() ).to.be.false;
+
+        // Test 4 : <=
+        c = new MyCheck( test4BigNumber );
+        c.setTestCondition( '<=' );
+        c.setResult( test4SmallNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setResult( test4BigNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setTarget( test4SmallNumber );
+        c.setResult( test4BigNumber );
+        expect( c.isPass() ).to.be.false;
+    });
+
+    it ( 'should default to the >= test condition', () => {
+
+        let bigNumber = TestCore.randomInt() + 100;
+        let smallNumber = TestCore.randomInt( bigNumber );
+
+        c = new MyCheck( smallNumber );
+        c.setResult( bigNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setResult( smallNumber );
+        expect( c.isPass() ).to.be.true;
+
+        c.setResult( smallNumber - 1 );
+        expect( c.isPass() ).to.be.false;
+    });
+
+    it ( 'should not accept any test conditions beyond the accepted >, <, >=, and <=', () => {
+
+        c = new MyCheck( TestCore.randomInt() );
+
+        expect( () => c.setTestCondition( 'hello' ) ).to.throw;
+        expect( () => c.setTestCondition( '<<' ) ).to.throw;
+        expect( () => c.setTestCondition( '<!' ) ).to.throw;
+        expect( () => c.setTestCondition() ).to.throw;
     });
 });

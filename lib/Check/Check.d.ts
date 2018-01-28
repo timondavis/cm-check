@@ -5,6 +5,7 @@ export declare abstract class Check {
     protected modifiers: Modifier[];
     protected rawResult: number;
     protected result: number;
+    protected testCondition: string;
     protected dieBag: DieBag;
     /**
      * @pre The attribute defined must exist on any entities tested against this check.
@@ -68,6 +69,20 @@ export declare abstract class Check {
      * @returns {DieBag}
      */
     getDieBag(): DieBag;
+    /**
+     * Set the comparison operator for the check pass test.  Result on left, Target on right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @param {string} operator
+     */
+    setTestCondition(operator: string): void;
+    /**
+     * Get the test condition for the check pass test.  Result is left of the symbol, target on the right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @returns {string}
+     */
+    getTestCondition(): string;
     /**
      * Get a report on the status of the check
      * @param {boolean} getReportAsString

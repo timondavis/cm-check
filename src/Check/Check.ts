@@ -8,6 +8,8 @@ export abstract class Check {
     protected rawResult: number = 0;
     protected result: number = 0;
 
+    protected testCondition : string = '>=';
+
     protected dieBag : DieBag;
 
 
@@ -49,7 +51,31 @@ export abstract class Check {
      */
     public isPass() : boolean {
 
-        return ( this.getResult() >= this.getTarget() );
+        let isPass : boolean = false;
+
+        switch( this.getTestCondition() ) {
+
+            case( '>=' ) : {
+                isPass = ( this.getResult() >= this.getTarget() );
+                break;
+            }
+            case( '>' ) : {
+                isPass = ( this.getResult() > this.getTarget() );
+                break;
+            }
+            case( '<=' ) : {
+                isPass = ( this.getResult() <= this.getTarget() );
+                break;
+            }
+            case( '<' ) : {
+                isPass = ( this.getResult() < this.getTarget() );
+                break;
+            }
+            default:
+                throw ( "Invalid test operator '" + this.getTestCondition() + "', cannot perform test");
+        }
+
+        return isPass;
     }
 
     /**
@@ -116,6 +142,32 @@ export abstract class Check {
     public getDieBag() : DieBag {
 
         return this.dieBag;
+    }
+
+    /**
+     * Set the comparison operator for the check pass test.  Result on left, Target on right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @param {string} operator
+     */
+    public setTestCondition( operator : string ) {
+
+        if ( operator != '>' && operator != '>=' && operator != '<' && operator != '<=' ) {
+            throw( 'Invalid success operator provided.  Value values include "<", "<=", ">", ">="');
+        }
+
+        this.testCondition = operator;
+    }
+
+    /**
+     * Get the test condition for the check pass test.  Result is left of the symbol, target on the right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @returns {string}
+     */
+    public getTestCondition() : string {
+
+        return this.testCondition;
     }
 
     /**
