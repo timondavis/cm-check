@@ -49,5 +49,4 @@ describe( 'Modifier', () => {
         m = new MyModifier( name, 10 );
         expect( m.getName() ).to.be.equal( name );
     });
-
 });

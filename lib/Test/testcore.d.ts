@@ -43,5 +43,5 @@ export declare class TestCore {
      * @param {DieBag} bag
      */
     static validateCountsOnBagWithDefinitions(dieDefinitions: number[][], bag: DieBag): void;
-    static countTotalValuesOfDieInBag(bag: DieBag): number;
+    static countTotalValuesOfDieInBag(bag: DieBag, sides?: string): number;
 }

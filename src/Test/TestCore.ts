@@ -116,16 +116,25 @@ export class TestCore {
         }
     }
 
-    public static countTotalValuesOfDieInBag( bag: DieBag ) : number {
+    public static countTotalValuesOfDieInBag( bag: DieBag, sides: string = '' ) : number {
 
         let total = 0;
-        Object.keys( bag.dieMap ).forEach( sides => {
+        if ( sides === '' ){
 
-            for ( let dieIndex = 0; dieIndex < bag.dieMap[ sides ].length; dieIndex++ ) {
+            Object.keys( bag.dieMap ).forEach( sides => {
+                for ( let dieIndex = 0; dieIndex < bag.dieMap[ sides ].length; dieIndex++ ) {
+
+                    total += bag.dieMap[ sides ][ dieIndex ].getValue();
+                }
+            });
+        }
+        else {
+
+            for( let dieIndex = 0 ; dieIndex < bag.dieMap[ sides ].length ; dieIndex++) {
 
                 total += bag.dieMap[ sides ][ dieIndex ].getValue();
             }
-        });
+        }
 
         return total;
     }

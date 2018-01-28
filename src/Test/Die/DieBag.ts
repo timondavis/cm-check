@@ -184,24 +184,37 @@ describe( 'DieBag', () => {
 
     it( 'should deliver all die filtered by # of sides correctly', () => {
 
-        bag = new DieBag();
+        for ( let testPass = 0 ; testPass < 50 ; testPass++ ) {
 
-        let count1 = TestCore.randomInt( 100 );
-        let sides1 = TestCore.randomInt( 100 );
-        let count2 = TestCore.randomInt( 100 );
-        let sides2 = TestCore.randomInt( 100 );
-        let count3 = TestCore.randomInt( 100 );
-        let sides3 = TestCore.randomInt( 100 );
+            bag = new DieBag();
 
-        bag.add( count1, sides1 );
-        bag.add( count2, sides2 );
-        bag.add( count3, sides3 );
+            let count1 = TestCore.randomInt( 100 );
+            let count2 = TestCore.randomInt( 100 );
+            let count3 = TestCore.randomInt( 100 );
+            let sides1 = TestCore.randomInt( 100 );
+            let sides2 : number;
+            let sides3 : number;
 
-        bag.roll();
+            do {
+                sides2 = TestCore.randomInt( 100 );
+            }  while ( sides2 === sides1 )
 
-        expect( bag.getDieWithSides( sides1 ).length ).is.equal( count1 );
-        expect( bag.getDieWithSides( sides2 ).length ).is.equal( count2 );
-        expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
+            do {
+                sides3 = TestCore.randomInt( 100 );
+            } while( sides3 == sides1 || sides3 == sides2 );
+
+
+            bag.add( count1, sides1 );
+            bag.add( count2, sides2 );
+            bag.add( count3, sides3 );
+
+            bag.roll();
+
+            expect( bag.getDieWithSides( sides1 ).length ).is.equal( count1 );
+            expect( bag.getDieWithSides( sides2 ).length ).is.equal( count2 );
+            expect( bag.getDieWithSides( sides3 ).length ).is.equal( count3 );
+        }
+
     });
 
 });
