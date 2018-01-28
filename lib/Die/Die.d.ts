@@ -25,10 +25,11 @@ export declare class Die {
     setValue(newValue: number): Die;
     /**
      * Lock/Unlock the die from being removed or affected
-     * @param {boolean} locked
+     *
+     * @param {boolean} setLockTo
      * @returns {Die}
      */
-    setLock(locked?: boolean): Die;
+    lock(setLockTo?: boolean): Die;
     /**
      * Is the die locked?
      * @returns {boolean}

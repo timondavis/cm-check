@@ -56,7 +56,8 @@ export class Die {
 
     /**
      * Lock/Unlock the die from being removed or affected
-     * @param {boolean} locked
+     *
+     * @param {boolean} setLockTo
      * @returns {Die}
      */
     public lock( setLockTo : boolean = true ) : Die{
