@@ -70,6 +70,20 @@ export declare abstract class Check {
      */
     getDieBag(): DieBag;
     /**
+     * Add die to the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     */
+    addDie(count: number, sides: number): void;
+    /**
+     * Remove die from the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     */
+    removeDie(count: number, sides: number): void;
+    /**
      * Set the comparison operator for the check pass test.  Result on left, Target on right.
      * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
      *

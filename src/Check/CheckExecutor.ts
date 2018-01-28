@@ -66,6 +66,13 @@ export class CheckExecutor extends EventEmitter {
         return check;
     }
 
+    /**
+     * Generate a new check.  Returns a simple check by default, but you can pass in the key of a check type to get
+     * an instance.
+     *
+     * @param {string} type
+     * @returns {Check}
+     */
     public generateCheck( type : string = 'simple') : Check {
 
         if ( ! this.checkTypes.hasOwnProperty( type ) ) { throw ( "Check Type '" + type + "' does not exist."); }
@@ -73,6 +80,13 @@ export class CheckExecutor extends EventEmitter {
         return this.checkTypes[type]();
     }
 
+    /**
+     * Register a check type to the CheckExecutor.  The callback provided should return an instance of the check
+     * being paired with it.
+     *
+     * @param {string} type
+     * @param {Function} callback
+     */
     public registerCheckType( type: string, callback : Function ) {
 
         this.checkTypes[type] = callback;
