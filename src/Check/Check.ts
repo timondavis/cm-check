@@ -1,4 +1,4 @@
-import { DieBag } from "../DieBag";
+import { DieBag } from "../Die/DieBag";
 import { Modifier } from "./Modifier/Modifier";
 
 export abstract class Check {
@@ -7,6 +7,8 @@ export abstract class Check {
 
     protected rawResult: number = 0;
     protected result: number = 0;
+
+    protected testCondition : string = '>=';
 
     protected dieBag : DieBag;
 
@@ -49,7 +51,31 @@ export abstract class Check {
      */
     public isPass() : boolean {
 
-        return ( this.result >= this.target );
+        let isPass : boolean = false;
+
+        switch( this.getTestCondition() ) {
+
+            case( '>=' ) : {
+                isPass = ( this.getResult() >= this.getTarget() );
+                break;
+            }
+            case( '>' ) : {
+                isPass = ( this.getResult() > this.getTarget() );
+                break;
+            }
+            case( '<=' ) : {
+                isPass = ( this.getResult() <= this.getTarget() );
+                break;
+            }
+            case( '<' ) : {
+                isPass = ( this.getResult() < this.getTarget() );
+                break;
+            }
+            default:
+                throw ( "Invalid test operator '" + this.getTestCondition() + "', cannot perform test");
+        }
+
+        return isPass;
     }
 
     /**
@@ -119,6 +145,32 @@ export abstract class Check {
     }
 
     /**
+     * Set the comparison operator for the check pass test.  Result on left, Target on right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @param {string} operator
+     */
+    public setTestCondition( operator : string ) {
+
+        if ( operator != '>' && operator != '>=' && operator != '<' && operator != '<=' ) {
+            throw( 'Invalid success operator provided.  Value values include "<", "<=", ">", ">="');
+        }
+
+        this.testCondition = operator;
+    }
+
+    /**
+     * Get the test condition for the check pass test.  Result is left of the symbol, target on the right.
+     * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
+     *
+     * @returns {string}
+     */
+    public getTestCondition() : string {
+
+        return this.testCondition;
+    }
+
+    /**
      * Get a report on the status of the check
      * @param {boolean} getReportAsString
      *
@@ -126,14 +178,15 @@ export abstract class Check {
      */
     public report( getReportAsString : boolean ) : any {
 
-        let report = {
-            isPass: this.isPass(),
-            target: this.target,
-            result: this.result,
-            modifiers: this.getModifiers(),
-            rollResult: this.getDieBag().getTotal(),
-            dieBag: this.getDieBag(),
-        };
+        let report = new CheckReport(
+            this.isPass(),
+            this.getTarget(),
+            this.getResult(),
+            this.getModifiers(),
+            this.getRawRollResult(),
+            this.getDieBag()
+        );
+
         return ( getReportAsString ) ? JSON.stringify( report ) : report;
     }
 
@@ -148,4 +201,18 @@ export abstract class Check {
      * Set a new DieBag on this check.
      */
     protected abstract setBaseDieBag() : void;
+}
+
+export class CheckReport {
+
+    public constructor(
+        public isPass : boolean,
+        public target : number,
+        public result : number,
+        public modifiers : Modifier[],
+        public rollResult : number,
+        public dieBag: DieBag
+    ) {
+
+    }
 }

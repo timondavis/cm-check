@@ -18,7 +18,6 @@ export class CheckExecutor extends EventEmitter {
     /**
      * Execute a check
      *
-     * @TODO THREAD LOCKING IS VERY RUDIMENTARY.  IMPROVE
      * @param {Check} check
      * @returns {Check}
      */
@@ -27,26 +26,30 @@ export class CheckExecutor extends EventEmitter {
         while ( CheckExecutor.isThreadLocked() ) { /* wait for other simultaneous processes */ }
 
         CheckExecutor.engageThreadLock();
-        this.on( check.getType() + '_pre_check_before_modifiers', CheckExecutor.processModifiers );
-        this.emit( check.getType() + '_pre_check_before_modifiers', check, 'before');
+        this.on( check.getType() + '_modifiers', CheckExecutor.processModifiers );
+        this.emit( check.getType() + '_modifiers', check, 'before');
         while ( CheckExecutor.isThreadLocked() ) { /* wait */ }
+        this.removeListener( check.getType() + '_modifiers',  CheckExecutor.processModifiers );
 
         CheckExecutor.engageThreadLock();
-        this.on( check.getType() + '_pre_check_after_modifiers', CheckExecutor.liftThreadLock );
-        this.emit( check.getType() + '_pre_check_after_modifiers', check, 'before' );
+        this.on( check.getType() + '_roll', CheckExecutor.liftThreadLock );
+        this.emit( check.getType() + '_roll', check, 'before' );
         while ( CheckExecutor.isThreadLocked() ) { /* wait */ }
+        this.removeListener( check.getType() + '_roll',   CheckExecutor.liftThreadLock   );
 
         CheckExecutor.doCheck( check );
 
         CheckExecutor.engageThreadLock();
-        this.on( check.getType() + '_post_check_before_modifiers', CheckExecutor.processModifiers );
-        this.emit( check.getType() + '_post_check_before_modifiers', check, 'after' );
+        this.on( check.getType() + '_modifiers', CheckExecutor.processModifiers );
+        this.emit( check.getType() + '_modifiers', check, 'after' );
         while ( CheckExecutor.isThreadLocked() ) { /* wait */ }
+        this.removeListener( check.getType() + '_modifiers',  CheckExecutor.processModifiers );
 
         CheckExecutor.engageThreadLock();
-        this.on( check.getType() + '_post_check_after_modifiers', CheckExecutor.liftThreadLock );
-        this.emit( check.getType() + '_post_check_after_modifiers', check, 'after' );
+        this.on( check.getType() + '_finish', CheckExecutor.liftThreadLock );
+        this.emit( check.getType() + '_finish', check, 'after' );
         while ( CheckExecutor.isThreadLocked() ) { /* wait */ }
+        this.removeListener( check.getType() + '_finish', CheckExecutor.liftThreadLock );
 
         // Has the dice bag been affected in a way that affects the final result?  Compare the difference between
         // the adjusted and original dice rolls and apply the difference to the result.
@@ -54,11 +57,6 @@ export class CheckExecutor extends EventEmitter {
         if ( difference !== 0 ) {
                 check.setResult( check.getResult() + difference );
         }
-
-        this.removeListener( check.getType() + '_pre_check_before_modifiers',  CheckExecutor.processModifiers );
-        this.removeListener( check.getType() + '_pre_check_after_modifiers',   CheckExecutor.liftThreadLock   );
-        this.removeListener( check.getType() + '_post_check_before_modifiers', CheckExecutor.processModifiers );
-        this.removeListener( check.getType() + '_post_check_after_modifiers',  CheckExecutor.liftThreadLock   );
 
         return check;
     }

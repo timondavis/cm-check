@@ -18,9 +18,6 @@ export declare class D20AttributeCheck extends Check {
      * @returns {string}
      */
     getType(): string;
-    /**
-     *
-     */
     protected setBaseDieBag(): void;
     protected static translateAttributeValue(value: number): number;
 }
