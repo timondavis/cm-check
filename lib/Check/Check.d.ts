@@ -12,7 +12,7 @@ export declare abstract class Check {
      *
      * @param {number} target
      */
-    constructor(target: number);
+    constructor(target?: number);
     /**
      * Add a new modifier to the check's target number before the roll
      *
@@ -60,9 +60,9 @@ export declare abstract class Check {
      */
     getRawRollResult(): number;
     /**
-     * Execute the check
+     * Roll the dice for the check
      */
-    check(): void;
+    roll(): void;
     /**
      * Get the die bag belonging to the check
      *

@@ -12,13 +12,12 @@ export abstract class Check {
 
     protected dieBag : DieBag;
 
-
     /**
      * @pre The attribute defined must exist on any entities tested against this check.
      *
      * @param {number} target
      */
-    public constructor( protected target: number ) {
+    public constructor( protected target: number = 0 ) {
 
         this.dieBag = new DieBag();
         this.setBaseDieBag();
@@ -125,9 +124,9 @@ export abstract class Check {
     }
 
     /**
-     * Execute the check
+     * Roll the dice for the check
      */
-    public check() : void {
+    public roll() : void {
 
         this.dieBag.roll();
         this.rawResult = this.dieBag.getTotal();

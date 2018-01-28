@@ -1,10 +1,13 @@
 import { EventEmitter } from 'events';
 import { Check } from "./Check";
+import { SimpleCheck } from "./SimpleCheck";
+import { D20AttributeCheck } from "./D20AttributeCheck";
 
 export class CheckExecutor extends EventEmitter {
 
     private static instance : CheckExecutor = new CheckExecutor();
     private static locked : boolean = false;
+    protected checkTypes : { [key:string] : Function } = {};
 
     /**
      * Get the global instance of the Check Machine
@@ -17,6 +20,8 @@ export class CheckExecutor extends EventEmitter {
 
     /**
      * Execute a check
+     *
+     * @TODO is there a better way to thread-lock on this method?
      *
      * @param {Check} check
      * @returns {Check}
@@ -61,17 +66,24 @@ export class CheckExecutor extends EventEmitter {
         return check;
     }
 
-    /**
-     * Execute a check passed in
-     *
-     * @param {Check} check
-     */
-    private static doCheck( check : Check ) {
+    public generateCheck( type : string = 'simple') : Check {
 
-        check.check();
+        if ( ! this.checkTypes.hasOwnProperty( type ) ) { throw ( "Check Type '" + type + "' does not exist."); }
+
+        return this.checkTypes[type]();
     }
 
-    private static processModifiers( check : Check, phase: string ) : void {
+    public registerCheckType( type: string, callback : Function ) {
+
+        this.checkTypes[type] = callback;
+    }
+
+    protected static doCheck( check : Check ) {
+
+        check.roll();
+    }
+
+    protected static processModifiers( check : Check, phase: string ) : void {
 
         let modifiers = check.getModifiers();
 
@@ -92,6 +104,9 @@ export class CheckExecutor extends EventEmitter {
     private constructor() {
 
         super();
+
+        this.registerCheckType( 'simple', () => { return new SimpleCheck() } );
+        this.registerCheckType( 'd20-attribute', () => { return new D20AttributeCheck() })
     }
 }
 

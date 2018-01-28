@@ -59,7 +59,7 @@ describe( 'Check', () => {
 
         c = new MyCheck( target );
         c.getDieBag().add( sides, count );
-        c.check();
+        c.roll();
 
         let originalResult = c.getDieBag().getTotal();
 
@@ -71,13 +71,13 @@ describe( 'Check', () => {
 
        c = new MyCheck( 10 );
        c.getDieBag().add( 5, 20 );
-       c.check();
+       c.roll();
 
        let firstResult = c.getResult();
 
        for ( let loopCounter = 0 ; loopCounter < 5 ; loopCounter++ ) {
 
-           c.check();
+           c.roll();
 
            if ( firstResult != c.getResult() ) { break; }
        }
@@ -98,7 +98,7 @@ describe( 'Check', () => {
 
         TestCore.addDieToBagWithDefinitions( dieDefinitions, c.getDieBag() );
         c.addModifier( new ResultModifier( 'M1', modifierValue ));
-        c.check();
+        c.roll();
 
         report = c.report( false );
 
@@ -202,4 +202,11 @@ describe( 'Check', () => {
         expect( () => c.setTestCondition( '<!' ) ).to.throw;
         expect( () => c.setTestCondition() ).to.throw;
     });
+
+    it ( 'should create a 0-target default instance when no target number is provided in the constructor', () => {
+
+        c = new MyCheck();
+        expect( c.getTarget() ).to.be.equal( 0 );
+    });
+
 });

@@ -198,4 +198,17 @@ describe( 'CheckExecutor', () => {
 
         CE.removeAllListeners( c.getType() + '_finish' );
     });
+
+    it ( 'should facilitate registration and generation of any registered check type', () => {
+
+        CE.registerCheckType( 'my', () => { return new MyCheck() } );
+
+        let c = CE.generateCheck( 'my' );
+        c.getDieBag().add( TestCore.randomInt(), TestCore.randomInt() );
+
+        CE.execute( c );
+
+        expect( c.getResult() ).to.not.be.equal( 0 );
+    });
+
 });
