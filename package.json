@@ -1,7 +1,7 @@
 {
   "name": "cm-check",
   "version": "1.0.0",
-  "description": "System for processing die-based checks in role playing games.  Observable hooks allow outside systems to affect the check in some fashion.",
+  "description": "Role Playing Game (RPG) Toolkit which facilitates easy-to-use and customizable checks.  Ability checks, combat checks, and anything else you can imagine.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "Creative Mutagens <timon.davis@gmail.com>",
