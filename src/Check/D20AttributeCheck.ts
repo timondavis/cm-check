@@ -42,7 +42,7 @@ export class D20AttributeCheck extends Check {
         }
     }
 
-    protected setBaseDieBag(): void {
+    protected setCheckDie(): void {
 
         this.dieBag.add( 1, 20 );
     }

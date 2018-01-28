@@ -14,7 +14,7 @@ describe( 'DieModifier', () => {
 
     class MyCheck extends Check {
         getType(): string { return 'MyCheck'; }
-        protected setBaseDieBag(): void { }
+        protected setCheckDie(): void { }
     }
 
     it( 'should be applied after the _modifiers hook in the "before" phase, by default', () => {

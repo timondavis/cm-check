@@ -12,7 +12,7 @@ describe( 'TargetModifier', () => {
 
     class MyCheck extends Check {
         getType(): string { return 'MyCheck'; }
-        protected setBaseDieBag(): void { }
+        protected setCheckDie(): void { }
     }
 
     it( 'affects the result of checks', () => {

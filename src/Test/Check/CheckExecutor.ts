@@ -13,7 +13,7 @@ describe( 'CheckExecutor', () => {
 
     class MyCheck extends Check {
         getType(): string { return 'MyCheck' }
-        protected setBaseDieBag(): void { }
+        protected setCheckDie(): void { }
     }
 
     class MyResultModifier extends Modifier {
