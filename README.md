@@ -18,16 +18,18 @@ var CheckExecutor = require( 'cm-check' );
 var strengthCheck = CheckExecutor.generateCheck();
 
 strengthCheck.setTarget( 14 ); // Check Target # = 14
-strengthCheck.getDieBag().add( 1, 20 ); // Check Die Rolled = 1d20
+strengthCheck.addDie( 1, 20 ); // Check Die Rolled = 1 die with 20 sides 
 
 // Execute the Check
 CheckExecutor.execute( strengthCheck ); // Roll dice, do other processes...
 
 // Get Result and print to console
 if ( strengthCheck.isPass() ) { console.log( 'Pass!' ); }
-else { console.log( 'Fail' ); }
+else { console.log( 'Fail :(' ); }
 
 ```
+
+In the above example, we invoke the CheckExecutor (which is the main library from which everything else is provided)
 
 
 

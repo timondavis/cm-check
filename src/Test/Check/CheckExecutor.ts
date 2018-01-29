@@ -203,12 +203,27 @@ describe( 'CheckExecutor', () => {
 
         CE.registerCheckType( 'my', () => { return new MyCheck() } );
 
-        let c = CE.generateCheck( 'my' );
+        c = CE.generateCheck( 'my' );
         c.getDieBag().add( TestCore.randomInt(), TestCore.randomInt() );
 
         CE.execute( c );
 
         expect( c.getResult() ).to.not.be.equal( 0 );
+    });
+
+    it ( 'should accept and list registered check types', () => {
+
+        CE.registerCheckType( 'MyCheck', () => { return new MyCheck() } );
+
+        expect( CE.getCheckTypes().indexOf( 'MyCheck' ) ).to.not.be.equal( -1 );
+
+        c = CE.generateCheck( 'MyCheck' );
+        c.addDie( TestCore.randomInt(), TestCore.randomInt() );
+        c.setTarget( 10 );
+        expect( c.getType() ).to.be.equal( 'MyCheck' );
+
+        CE.execute( c );
+        expect( c.getResult() ).not.to.be.equal( 0 );
     });
 
 });

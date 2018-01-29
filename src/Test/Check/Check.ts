@@ -220,8 +220,6 @@ describe( 'Check', () => {
         c.removeDie( smallNumber, sides );
 
         expect( c.getDieBag().getDieWithSides( sides ) ).to.have.length( bigNumber - smallNumber );
-
-
     });
 
 });
