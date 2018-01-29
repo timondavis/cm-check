@@ -4,6 +4,8 @@ import { SimpleCheck } from "./SimpleCheck";
 import { D20AttributeCheck } from "./D20AttributeCheck";
 import { Modifier } from "./Modifier/Modifier";
 import { DieModifier } from "./Modifier/DieModifier";
+import { ResultModifier } from "./Modifier/ResultModifier";
+import { TargetModifier } from "./Modifier/TargetModifier";
 
 export class CheckExecutor extends EventEmitter {
 
@@ -167,7 +169,9 @@ export class CheckExecutor extends EventEmitter {
         this.registerCheckType( 'simple', () => { return new SimpleCheck() } );
         this.registerCheckType( 'd20-attribute', () => { return new D20AttributeCheck() })
 
-        this.registerModifierType( 'die', () => { return new DieModifier() })
+        this.registerModifierType( 'die', () => { return new DieModifier() });
+        this.registerModifierType( 'result', () => { return new ResultModifier() } );
+        this.registerModifierType( 'target', () => { return new TargetModifier() } );
     }
 }
 

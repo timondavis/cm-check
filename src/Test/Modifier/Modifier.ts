@@ -42,11 +42,14 @@ describe( 'Modifier', () => {
         expect( Number( m.getValue() ) ).to.be.equal( newModifierValue );
     });
 
-    it ( 'should report its name, which is defined on invocation', () => {
+    it ( 'should report its name and allow updates to the name', () => {
 
         let name = 'Name';
 
         m = new MyModifier( name, 10 );
         expect( m.getName() ).to.be.equal( name );
+
+        m.setName( 'New Name' );
+        expect( m.getName() ).to.be.equal( 'New Name' );
     });
 });

@@ -256,4 +256,17 @@ describe( 'CheckExecutor', () => {
 
         expect( c.getResult() ).to.be.equal( modifierBoost );
     });
+
+    it ( 'should provide default check types for immediate use', () => {
+
+        expect( CE.generateCheck().getType() ).to.be.equal( 'simple' );
+        expect( CE.generateCheck( 'd20-attribute' ).getType() ).to.be.equal( 'd20-attribute' );
+    });
+
+    it ( 'should provide default modifier types for immediate use', () => {
+
+        expect( CE.generateModifier( 'result' ).getType() ).to.be.equal( 'result' );
+        expect( CE.generateModifier( 'target' ).getType() ).to.be.equal( 'target' );
+        expect( CE.generateModifier( 'die' ).getType() ).to.be.equal( 'die' );
+    });
 });

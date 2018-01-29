@@ -10,12 +10,40 @@ export abstract class Modifier {
 
     public constructor( protected name: string = '', protected value: string | number | string[] | number[] = [] ) { }
 
+    /**
+     * Get the name of this modifier
+     * @returns {string}
+     */
     public getName() : string {
 
         return this.name;
     }
 
+    /**
+     * Set the name of this modifier
+     *
+     * @param {string} name
+     * @returns {Modifier}
+     */
+    public setName( name : string) : Modifier {
+
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the value of this modifier
+     *
+     * @returns {string | number | string[] | number[]}
+     */
     public getValue() : string | number | string[] | number[] { return this.value; }
+
+    /**
+     * Set the value of this modifier
+     *
+     * @param {string | number | string[] | number[]} value
+     * @returns {Modifier}
+     */
     public setValue( value : string | number | string[] | number[] ) : Modifier {
         this.value = value;
         return this;
