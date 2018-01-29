@@ -79,7 +79,7 @@ export class CheckExecutor extends EventEmitter {
 
         if ( ! this.checkTypes.hasOwnProperty( type ) ) { throw ( "Check Type '" + type + "' does not exist."); }
 
-        return <check> this.checkTypes[type]();
+        return this.checkTypes[type]();
     }
 
     /**
@@ -124,6 +124,16 @@ export class CheckExecutor extends EventEmitter {
     public registerModifierType( type: string, callback : Function ) {
 
         this.modifierTypes[type] = callback;
+    }
+
+    /**
+     * Get an array of available modifier names
+     *
+     * @returns {string[]}
+     */
+    public getModifierTypes() : string[] {
+
+        return Object.keys( this.modifierTypes );
     }
 
     protected static doCheck( check : Check ) {

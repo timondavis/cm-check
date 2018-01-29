@@ -60,6 +60,12 @@ export declare class CheckExecutor extends EventEmitter {
      * @param {Function} callback
      */
     registerModifierType(type: string, callback: Function): void;
+    /**
+     * Get an array of available modifier names
+     *
+     * @returns {string[]}
+     */
+    getModifierTypes(): string[];
     protected static doCheck(check: Check): void;
     protected static processModifiers(check: Check, phase: string): void;
     protected static engageThreadLock(): void;

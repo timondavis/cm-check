@@ -228,16 +228,32 @@ describe( 'CheckExecutor', () => {
 
     it ( 'should facilitate registration and generation of any registered modifier type', () => {
 
+        let modifierBoost = TestCore.randomInt();
+
         CE.registerModifierType( 'MyTargetModifier',
-            () => { return new MyTargetModifier( 'test', TestCore.randomInt() ) });
+            () => { return new MyTargetModifier( 'test', 0 ) });
 
         c = CE.generateCheck().addDie( TestCore.randomInt(), TestCore.randomInt() );
-        c.addModifier( CE.generateModifier( 'MyTargetModifier' ).setValue( 7 ) );
+        c.addModifier( CE.generateModifier( 'MyTargetModifier' ).setValue( modifierBoost ) );
 
         CE.execute( c );
 
-        expect( c.getTarget() ).to.be.equal( 7 );
+        expect( c.getTarget() ).to.be.equal( modifierBoost );
     });
 
+    it ( 'should accept and list registered modifier types', () => {
 
+        let modifierBoost = TestCore.randomInt();
+
+        CE.registerModifierType( 'my', () => { return new ResultModifier( 'name', TestCore.randomInt() ) } );
+
+        expect( CE.getModifierTypes().indexOf( 'my' ) ).to.not.be.equal( -1 );
+
+        c = CE.generateCheck();
+        c.addModifier( CE.generateModifier( 'my' ).setValue( modifierBoost ) );
+
+        CE.execute( c );
+
+        expect( c.getResult() ).to.be.equal( modifierBoost );
+    });
 });
