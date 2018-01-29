@@ -8,7 +8,7 @@ export abstract class Modifier {
 
     protected phase: string = 'after';
 
-    public constructor( protected name: string, protected value: string | number | string[] | number[] ) { }
+    public constructor( protected name: string = '', protected value: string | number | string[] | number[] = [] ) { }
 
     public getName() : string {
 

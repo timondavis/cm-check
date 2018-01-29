@@ -5,7 +5,7 @@ export declare abstract class Modifier {
     abstract applyTo(check: Check): void;
     abstract getType(): string;
     protected phase: string;
-    constructor(name: string, value: string | number | string[] | number[]);
+    constructor(name?: string, value?: string | number | string[] | number[]);
     getName(): string;
     getValue(): string | number | string[] | number[];
     setValue(value: string | number | string[] | number[]): Modifier;

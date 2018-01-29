@@ -3,6 +3,7 @@ import { Check } from "./Check";
 import { SimpleCheck } from "./SimpleCheck";
 import { D20AttributeCheck } from "./D20AttributeCheck";
 import { Modifier } from "./Modifier/Modifier";
+import { DieModifier } from "./Modifier/DieModifier";
 
 export class CheckExecutor extends EventEmitter {
 
@@ -165,6 +166,8 @@ export class CheckExecutor extends EventEmitter {
 
         this.registerCheckType( 'simple', () => { return new SimpleCheck() } );
         this.registerCheckType( 'd20-attribute', () => { return new D20AttributeCheck() })
+
+        this.registerModifierType( 'die', () => { return new DieModifier() })
     }
 }
 
