@@ -226,4 +226,18 @@ describe( 'CheckExecutor', () => {
         expect( c.getResult() ).not.to.be.equal( 0 );
     });
 
+    it ( 'should facilitate registration and generation of any registered modifier type', () => {
+
+        CE.registerModifierType( 'MyTargetModifier',
+            () => { return new MyTargetModifier( 'test', TestCore.randomInt() ) });
+
+        c = CE.generateCheck().addDie( TestCore.randomInt(), TestCore.randomInt() );
+        c.addModifier( CE.generateModifier( 'MyTargetModifier' ).setValue( 7 ) );
+
+        CE.execute( c );
+
+        expect( c.getTarget() ).to.be.equal( 7 );
+    });
+
+
 });
