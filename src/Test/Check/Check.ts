@@ -13,11 +13,6 @@ describe( 'Check', () => {
         protected setCheckDie(): void {}
     }
 
-    it( 'should not be directly instantiable', () => {
-
-        expect( () => new Check() ).to.throw();
-    });
-
     it( 'should allow for modifers to be added', () => {
 
         let sides = TestCore.randomInt();
@@ -200,7 +195,6 @@ describe( 'Check', () => {
         expect( () => c.setTestCondition( 'hello' ) ).to.throw;
         expect( () => c.setTestCondition( '<<' ) ).to.throw;
         expect( () => c.setTestCondition( '<!' ) ).to.throw;
-        expect( () => c.setTestCondition() ).to.throw;
     });
 
     it ( 'should create a 0-target default instance when no target number is provided in the constructor', () => {
