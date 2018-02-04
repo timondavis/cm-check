@@ -16,11 +16,6 @@ describe( 'Modifier', () => {
         getType(): string { return 'MyModifier'; }
     }
 
-    it( 'is a base abstract class and cannot be invoked directly', () => {
-
-        expect( () => new Modifier( 'Name', 10 ) ).to.throw;
-    })
-
     it ( 'is is applied to the "after" phase of the check, unless modified.  It should report its phase.', () => {
 
         m = new MyModifier( 'Name', 10 );
