@@ -181,3 +181,4 @@ You can get access to all of the classes provided on the CheckExecutor.Class obj
 #### API Docs 
 API Documentation is available at http://creativemutagens.com/projects/cm-check/api/
 
+![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png)
