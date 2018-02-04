@@ -49,14 +49,21 @@ export class D20AttributeCheck extends Check {
 
     protected static translateAttributeValue( value: number ) : number {
 
-        if ( value <= 3 ) { return -3; }
-        else if ( value <= 6 ) { return -2; }
-        else if ( value <= 9 ) { return -1; }
-        else if ( value <= 12 ) { return 0; }
-        else {
+        let isNegative = false;
 
-            value -= 12;
-            return Math.ceil( value / 3 );
+        if ( value < 10 ) {
+
+            isNegative = true;
+            value = Math.abs( 10 - value );
         }
+        else if ( value === 10 || value === 11 ) {
+
+            return 0;
+        }
+        else { value -= 11 }
+
+
+
+        return ( Math.ceil( value / 2 ) * ( ( isNegative ) ? -1 : 1 ) );
     }
 }

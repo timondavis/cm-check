@@ -36,35 +36,10 @@ describe( 'D20AttributeCheck', () => {
 
     it( 'should automatically convert attribute values into standard attribute modifiers according to D20 system', () => {
 
-        c = new D20AttributeCheck( 10, 0, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( -3 );
+        c = new D20AttributeCheck( 10, 1, 'Int' );
+        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( -5 );
 
-        c = new D20AttributeCheck( 10, 10, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 0 );
 
-        c = new D20AttributeCheck( 10, 19, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 3 );
-
-        c = new D20AttributeCheck( 10, 20, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 3 );
-
-        c = new D20AttributeCheck( 10, 21, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 3 );
-
-        c = new D20AttributeCheck( 10, 22, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 4 );
-
-        c = new D20AttributeCheck( 10, 30, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 6 );
-
-        c = new D20AttributeCheck( 10, 43, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 11 );
-
-        c = new D20AttributeCheck( 10, 45, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 11 );
-
-        c = new D20AttributeCheck( 10, 46, 'Int' );
-        expect( Number( c.getModifiers()[0].getValue() ) ).to.be.equal( 12 );
     });
 
     it( 'should allow the attribute value of the check to be updated and translated to the core modifier value', () => {
@@ -72,7 +47,43 @@ describe( 'D20AttributeCheck', () => {
         c = new D20AttributeCheck( 10, 10 );
         expect( c.getModifiers()[0].getValue() ).to.be.equal( 0 );
 
+
+
+        c.setAttributeValue( 1 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( -5 );
+
+        c.setAttributeValue( 2 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( -4 );
+
+        c.setAttributeValue( 9 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( -1 );
+
+        c.setAttributeValue( 10 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 0 );
+
+        c.setAttributeValue( 11 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 0 );
+
+        c.setAttributeValue( 12 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 1 );
+
         c.setAttributeValue( 13 );
         expect( c.getModifiers()[0].getValue() ).to.be.equal( 1 );
+
+        c.setAttributeValue( 14 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 2 );
+
+        c.setAttributeValue( 23 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 6 );
+
+        c.setAttributeValue( 24 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 7 );
+
+        c.setAttributeValue( 25 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 7 );
+
+        c.setAttributeValue( 26 );
+        expect( c.getModifiers()[0].getValue() ).to.be.equal( 8 );
+
     });
 });

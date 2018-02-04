@@ -2,12 +2,17 @@ import { EventEmitter } from 'events';
 import { Check } from "./Check";
 import { SimpleCheck } from "./SimpleCheck";
 import { D20AttributeCheck } from "./D20AttributeCheck";
+import { Modifier } from "./Modifier/Modifier";
+import { DieModifier } from "./Modifier/DieModifier";
+import { ResultModifier } from "./Modifier/ResultModifier";
+import { TargetModifier } from "./Modifier/TargetModifier";
 
 export class CheckExecutor extends EventEmitter {
 
     private static instance : CheckExecutor = new CheckExecutor();
     private static locked : boolean = false;
     protected checkTypes : { [key:string] : Function } = {};
+    protected modifierTypes : { [key:string] : Function } = {};
 
     /**
      * Get the global instance of the Check Machine
@@ -66,6 +71,13 @@ export class CheckExecutor extends EventEmitter {
         return check;
     }
 
+    /**
+     * Generate a new check.  Returns a simple check by default, but you can pass in the key of a check type to get
+     * an instance.
+     *
+     * @param {string} type
+     * @returns {Check}
+     */
     public generateCheck( type : string = 'simple') : Check {
 
         if ( ! this.checkTypes.hasOwnProperty( type ) ) { throw ( "Check Type '" + type + "' does not exist."); }
@@ -73,9 +85,58 @@ export class CheckExecutor extends EventEmitter {
         return this.checkTypes[type]();
     }
 
+    /**
+     * Register a check type to the CheckExecutor.  The callback provided should return an instance of the check
+     * being paired with it.
+     *
+     * @param {string} type
+     * @param {Function} callback
+     */
     public registerCheckType( type: string, callback : Function ) {
 
         this.checkTypes[type] = callback;
+    }
+
+    /**
+     * Get an array of the available check names
+     * @returns {string[]}
+     */
+    public getCheckTypes() : string[] {
+
+        return Object.keys( this.checkTypes );
+    }
+
+    /**
+     * Generate a new modifier instance
+     *
+     * @param {string} type
+     * @returns {Modifier}
+     */
+    public generateModifier( type : string ) : Modifier {
+
+        if ( ! this.modifierTypes.hasOwnProperty( type ) ) { throw ( "Modifier Type '" + type + "' does not exist."); }
+        return this.modifierTypes[type]();
+    }
+
+    /**
+     * Register a new modifier type
+     *
+     * @param {string} type
+     * @param {Function} callback
+     */
+    public registerModifierType( type: string, callback : Function ) {
+
+        this.modifierTypes[type] = callback;
+    }
+
+    /**
+     * Get an array of available modifier names
+     *
+     * @returns {string[]}
+     */
+    public getModifierTypes() : string[] {
+
+        return Object.keys( this.modifierTypes );
     }
 
     protected static doCheck( check : Check ) {
@@ -107,6 +168,10 @@ export class CheckExecutor extends EventEmitter {
 
         this.registerCheckType( 'simple', () => { return new SimpleCheck() } );
         this.registerCheckType( 'd20-attribute', () => { return new D20AttributeCheck() })
+
+        this.registerModifierType( 'die', () => { return new DieModifier() });
+        this.registerModifierType( 'result', () => { return new ResultModifier() } );
+        this.registerModifierType( 'target', () => { return new TargetModifier() } );
     }
 }
 

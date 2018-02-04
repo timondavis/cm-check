@@ -17,8 +17,9 @@ export declare abstract class Check {
      * Add a new modifier to the check's target number before the roll
      *
      * @param {TargetModifier} modifier
+     * @return { Check }
      */
-    addModifier(modifier: Modifier): void;
+    addModifier(modifier: Modifier): Check;
     /**
      * Get the modifiers attributed to this check.
      *
@@ -35,8 +36,10 @@ export declare abstract class Check {
      * Set or reset the target number for the check
      *
      * @param {number} target
+     *
+     * @returns {Check}
      */
-    setTarget(target: number): void;
+    setTarget(target: number): Check;
     /**
      * Get the target number for the check
      *
@@ -47,8 +50,9 @@ export declare abstract class Check {
      * Set or reset the result of the check
      *
      * @param {number} result
+     * @returns {Check}
      */
-    setResult(result: number): void;
+    setResult(result: number): Check;
     /**
      * Get the current result value on the check
      * @returns {number}
@@ -61,8 +65,10 @@ export declare abstract class Check {
     getRawRollResult(): number;
     /**
      * Roll the dice for the check
+     *
+     * @returns {Check}
      */
-    roll(): void;
+    roll(): Check;
     /**
      * Get the die bag belonging to the check
      *
@@ -70,12 +76,32 @@ export declare abstract class Check {
      */
     getDieBag(): DieBag;
     /**
+     * Add die to the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     *
+     * @returns {Check}
+     */
+    addDie(count: number, sides: number): Check;
+    /**
+     * Remove die from the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     *
+     * @returns {Check}
+     */
+    removeDie(count: number, sides: number): Check;
+    /**
      * Set the comparison operator for the check pass test.  Result on left, Target on right.
      * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
      *
      * @param {string} operator
+     *
+     * @returns {Check}
      */
-    setTestCondition(operator: string): void;
+    setTestCondition(operator: string): Check;
     /**
      * Get the test condition for the check pass test.  Result is left of the symbol, target on the right.
      * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'

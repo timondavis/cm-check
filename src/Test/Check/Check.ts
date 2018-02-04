@@ -209,4 +209,17 @@ describe( 'Check', () => {
         expect( c.getTarget() ).to.be.equal( 0 );
     });
 
+    it ( 'should allow for adding and removing die from the check\'s die bag on the fly', () => {
+
+        let bigNumber = TestCore.randomInt() + 1;
+        let smallNumber = TestCore.randomInt( bigNumber ) - 1;
+        let sides = TestCore.randomInt();
+
+        c = new MyCheck();
+        c.addDie( bigNumber, sides );
+        c.removeDie( smallNumber, sides );
+
+        expect( c.getDieBag().getDieWithSides( sides ) ).to.have.length( bigNumber - smallNumber );
+    });
+
 });

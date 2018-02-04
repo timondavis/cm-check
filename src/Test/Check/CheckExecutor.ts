@@ -203,7 +203,7 @@ describe( 'CheckExecutor', () => {
 
         CE.registerCheckType( 'my', () => { return new MyCheck() } );
 
-        let c = CE.generateCheck( 'my' );
+        c = CE.generateCheck( 'my' );
         c.getDieBag().add( TestCore.randomInt(), TestCore.randomInt() );
 
         CE.execute( c );
@@ -211,4 +211,62 @@ describe( 'CheckExecutor', () => {
         expect( c.getResult() ).to.not.be.equal( 0 );
     });
 
+    it ( 'should accept and list registered check types', () => {
+
+        CE.registerCheckType( 'MyCheck', () => { return new MyCheck() } );
+
+        expect( CE.getCheckTypes().indexOf( 'MyCheck' ) ).to.not.be.equal( -1 );
+
+        c = CE.generateCheck( 'MyCheck' );
+        c.addDie( TestCore.randomInt(), TestCore.randomInt() );
+        c.setTarget( 10 );
+        expect( c.getType() ).to.be.equal( 'MyCheck' );
+
+        CE.execute( c );
+        expect( c.getResult() ).not.to.be.equal( 0 );
+    });
+
+    it ( 'should facilitate registration and generation of any registered modifier type', () => {
+
+        let modifierBoost = TestCore.randomInt();
+
+        CE.registerModifierType( 'MyTargetModifier',
+            () => { return new MyTargetModifier( 'test', 0 ) });
+
+        c = CE.generateCheck().addDie( TestCore.randomInt(), TestCore.randomInt() );
+        c.addModifier( CE.generateModifier( 'MyTargetModifier' ).setValue( modifierBoost ) );
+
+        CE.execute( c );
+
+        expect( c.getTarget() ).to.be.equal( modifierBoost );
+    });
+
+    it ( 'should accept and list registered modifier types', () => {
+
+        let modifierBoost = TestCore.randomInt();
+
+        CE.registerModifierType( 'my', () => { return new ResultModifier( 'name', TestCore.randomInt() ) } );
+
+        expect( CE.getModifierTypes().indexOf( 'my' ) ).to.not.be.equal( -1 );
+
+        c = CE.generateCheck();
+        c.addModifier( CE.generateModifier( 'my' ).setValue( modifierBoost ) );
+
+        CE.execute( c );
+
+        expect( c.getResult() ).to.be.equal( modifierBoost );
+    });
+
+    it ( 'should provide default check types for immediate use', () => {
+
+        expect( CE.generateCheck().getType() ).to.be.equal( 'simple' );
+        expect( CE.generateCheck( 'd20-attribute' ).getType() ).to.be.equal( 'd20-attribute' );
+    });
+
+    it ( 'should provide default modifier types for immediate use', () => {
+
+        expect( CE.generateModifier( 'result' ).getType() ).to.be.equal( 'result' );
+        expect( CE.generateModifier( 'target' ).getType() ).to.be.equal( 'target' );
+        expect( CE.generateModifier( 'die' ).getType() ).to.be.equal( 'die' );
+    });
 });

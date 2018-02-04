@@ -27,10 +27,12 @@ export abstract class Check {
      * Add a new modifier to the check's target number before the roll
      *
      * @param {TargetModifier} modifier
+     * @return { Check }
      */
-    public addModifier( modifier: Modifier ) : void {
+    public addModifier( modifier: Modifier ) : Check {
 
         this.modifiers.push( modifier );
+        return this;
     }
 
     /**
@@ -81,9 +83,12 @@ export abstract class Check {
      * Set or reset the target number for the check
      *
      * @param {number} target
+     *
+     * @returns {Check}
      */
-    public setTarget( target : number ) {
+    public setTarget( target : number ) : Check {
         this.target = target;
+        return this;
     }
 
     /**
@@ -99,10 +104,12 @@ export abstract class Check {
      * Set or reset the result of the check
      *
      * @param {number} result
+     * @returns {Check}
      */
-    public setResult( result : number ) {
+    public setResult( result : number ) : Check {
 
         this.result = result;
+        return this;
     }
 
     /**
@@ -125,12 +132,16 @@ export abstract class Check {
 
     /**
      * Roll the dice for the check
+     *
+     * @returns {Check}
      */
-    public roll() : void {
+    public roll() : Check {
 
         this.dieBag.roll();
         this.rawResult = this.dieBag.getTotal();
         this.setResult( this.dieBag.getTotal() );
+
+        return this;
     }
 
     /**
@@ -143,19 +154,52 @@ export abstract class Check {
         return this.dieBag;
     }
 
+
+    /**
+     * Add die to the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     *
+     * @returns {Check}
+     */
+    public addDie( count : number, sides : number ) : Check {
+
+        this.getDieBag().add( count, sides );
+        return this;
+    }
+
+
+    /**
+     * Remove die from the check
+     *
+     * @param {number} count
+     * @param {number} sides
+     *
+     * @returns {Check}
+     */
+    public removeDie( count : number, sides : number ) : Check {
+
+        this.getDieBag().remove( count, sides );
+        return this;
+    }
+
     /**
      * Set the comparison operator for the check pass test.  Result on left, Target on right.
      * For example, 'result < target' is a pass if the result is less than the target, and the operator is '<'
      *
      * @param {string} operator
+     *
+     * @returns {Check}
      */
-    public setTestCondition( operator : string ) {
+    public setTestCondition( operator : string ) : Check {
 
         if ( operator != '>' && operator != '>=' && operator != '<' && operator != '<=' ) {
             throw( 'Invalid success operator provided.  Value values include "<", "<=", ">", ">="');
         }
 
         this.testCondition = operator;
+        return this;
     }
 
     /**

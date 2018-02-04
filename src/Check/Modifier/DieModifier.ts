@@ -22,7 +22,7 @@ export class DieModifier extends Modifier {
         }
     }
 
-    public constructor( protected name: string, protected value: string | number | string[] | number[] ) {
+    public constructor( protected name: string = 'Die Modifier', protected value: string | number | string[] | number[] = [] ) {
         super( name, value );
         this.setPhase( 'before' );
     }
