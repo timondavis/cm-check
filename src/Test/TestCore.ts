@@ -8,14 +8,13 @@ export class TestCore {
      *
      * @param {number} max
      * @param {boolean} includeZero
-     *
+     *===1`
      * @returns {number}
      */
     public static randomInt( max : number = 1000 , includeZero: boolean = false ) : number {
 
         return Math.floor (Math.random() * Math.floor(max ) + ( (includeZero) ? 0 : 1 ) );
     }
-
 
     /**
      * Randomize die and add them to the indicated tracker and bag.   The tracker will keep a hold of counts only.
