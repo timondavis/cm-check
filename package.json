@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Role Playing Game (RPG) Toolkit which facilitates easy-to-use and customizable checks.  Ability checks, combat checks, and anything else you can imagine.",
   "main": "lib/index.js",
-  "types": "lib/**/*.ts",
+  "types": "lib/index.d.ts",
   "author": "Creative Mutagens <timon.davis@gmail.com>",
   "license": "ISC",
   "dependencies": {

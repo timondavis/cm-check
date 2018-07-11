@@ -5,7 +5,7 @@ export declare class TestCore {
      *
      * @param {number} max
      * @param {boolean} includeZero
-     *
+     *===1`
      * @returns {number}
      */
     static randomInt(max?: number, includeZero?: boolean): number;

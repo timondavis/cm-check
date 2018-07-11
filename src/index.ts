@@ -9,6 +9,8 @@ import { Modifier } from "./Check/Modifier/Modifier";
 import { Die } from "./Die/Die";
 import { DieBag } from "./Die/DieBag";
 
+export { CheckExecutor, Check, D20AttributeCheck, SimpleCheck, DieModifier, ResultModifier, TargetModifier, Modifier, Die, DieBag }
+
 module.exports = CheckExecutor.getInstance();
 module.exports.Class = {};
 module.exports.Class.Check = Check;
