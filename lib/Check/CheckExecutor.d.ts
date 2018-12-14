@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { EventEmitter } from 'events';
 import { Check } from "./Check";
 import { Modifier } from "./Modifier/Modifier";
+import { EventEmitter } from "events";
 export declare class CheckExecutor extends EventEmitter {
     private static instance;
     private static locked;

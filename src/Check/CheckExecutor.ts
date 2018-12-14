@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { Check } from "./Check";
 import { SimpleCheck } from "./SimpleCheck";
 import { D20AttributeCheck } from "./D20AttributeCheck";
@@ -6,6 +5,7 @@ import { Modifier } from "./Modifier/Modifier";
 import { DieModifier } from "./Modifier/DieModifier";
 import { ResultModifier } from "./Modifier/ResultModifier";
 import { TargetModifier } from "./Modifier/TargetModifier";
+import { EventEmitter } from "events";
 
 export class CheckExecutor extends EventEmitter {
 
