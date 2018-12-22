@@ -11,18 +11,16 @@ import { DieBag } from "./Die/DieBag";
 
 export { CheckExecutor, Check, D20AttributeCheck, SimpleCheck, DieModifier, ResultModifier, TargetModifier, Modifier, Die, DieBag }
 
-module.exports = CheckExecutor.getInstance();
-module.exports.Class = {};
-module.exports.Class.Check = Check;
-module.exports.Class.CheckExecutor = CheckExecutor.getInstance();
-module.exports.Class.D20AttributeCheck = D20AttributeCheck;
-module.exports.Class.SimpleCheck = SimpleCheck;
-module.exports.Class.DieModifier = DieModifier;
-module.exports.Class.ResultModifier = ResultModifier;
-module.exports.Class.TargetModifier = TargetModifier;
-module.exports.Class.Modifier = Modifier;
-module.exports.Class.Die = Die;
-module.exports.Class.DieBag = DieBag;
+module.exports.Check = Check;
+module.exports.CheckExecutor = CheckExecutor.getInstance();
+module.exports.D20AttributeCheck = D20AttributeCheck;
+module.exports.SimpleCheck = SimpleCheck;
+module.exports.DieModifier = DieModifier;
+module.exports.ResultModifier = ResultModifier;
+module.exports.TargetModifier = TargetModifier;
+module.exports.Modifier = Modifier;
+module.exports.Die = Die;
+module.exports.DieBag = DieBag;
 
 
 
