@@ -2,12 +2,12 @@ import { Modifier } from "./Modifier";
 import { Check } from "../Check";
 export class ResultModifier extends Modifier {
 
-    applyTo( check: Check ): void {
-        let sumOfValues = Number( this.sumOfValues() );
+    ApplyTo( check: Check ): void {
+        let sumOfValues = Number( this.SumOfValues() );
         check.setResult( check.getResult() + sumOfValues );
     }
 
-    public getType(): string {
+    public get Type(): string {
         return 'result';
     }
 }

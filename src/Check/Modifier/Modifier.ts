@@ -2,11 +2,11 @@ import { Check } from "../Check";
 
 export abstract class Modifier {
 
-    abstract applyTo( check: Check ): void;
+    abstract ApplyTo( check: Check ): void;
 
-    abstract getType(): string;
+    abstract get Type(): string;
 
-    protected phase: string = 'after';
+    protected _phase: string = 'after';
 
     public constructor( protected name: string = '', protected value: string | number | string[] | number[] = [] ) { }
 
@@ -14,8 +14,7 @@ export abstract class Modifier {
      * Get the name of this modifier
      * @returns {string}
      */
-    public getName() : string {
-
+    public get Name(): string {
         return this.name;
     }
 
@@ -25,10 +24,8 @@ export abstract class Modifier {
      * @param {string} name
      * @returns {Modifier}
      */
-    public setName( name : string) : Modifier {
-
+    public set Name( name : string ) {
         this.name = name;
-        return this;
     }
 
     /**
@@ -36,7 +33,7 @@ export abstract class Modifier {
      *
      * @returns {string | number | string[] | number[]}
      */
-    public getValue() : string | number | string[] | number[] { return this.value; }
+    public get Value() : string | number | string[] | number[] { return this.value; }
 
     /**
      * Set the value of this modifier
@@ -44,9 +41,8 @@ export abstract class Modifier {
      * @param {string | number | string[] | number[]} value
      * @returns {Modifier}
      */
-    public setValue( value : string | number | string[] | number[] ) : Modifier {
+    public set Value( value : string | number | string[] | number[] ) {
         this.value = value;
-        return this;
     }
 
     /**
@@ -54,8 +50,8 @@ export abstract class Modifier {
      *
      * @returns {string}
      */
-    public getPhase() : string {
-        return this.phase;
+    public get Phase() : string {
+        return this._phase;
     }
 
     /**
@@ -63,10 +59,8 @@ export abstract class Modifier {
      * @param {string} phase
      * @returns {Modifier}
      */
-    public setPhase( phase : string ) : Modifier {
-
-        this.phase = phase;
-        return this;
+    public set Phase( phase : string ) {
+        this._phase = phase;
     }
 
     /**
@@ -76,7 +70,7 @@ export abstract class Modifier {
      *
      * @returns {number | boolean} Will return false if NaN is found in value array or as value.
      */
-    protected sumOfValues() : number | boolean {
+    protected SumOfValues() : number | boolean {
 
         let valueIndex = 0;
         let accumulatedValue = 0;
@@ -97,6 +91,5 @@ export abstract class Modifier {
         // Return the value if not an array, and only if its a number.  False otherwise.
         return ( isNaN( Number( this.value ) ) ? false : Number( this.value ) );
     }
-
 }
 

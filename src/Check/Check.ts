@@ -3,14 +3,14 @@ import { Modifier } from "./Modifier/Modifier";
 
 export abstract class Check {
 
-    protected modifiers : Modifier[] = [];
+    protected _modifiers : Modifier[] = [];
 
-    protected rawResult: number = 0;
-    protected result: number = 0;
+    protected _rawResult: number = 0;
+    protected _result: number = 0;
 
-    protected testCondition : string = '>=';
+    protected _testCondition : string = '>=';
 
-    protected dieBag : DieBag;
+    protected _dieBag : DieBag;
 
     /**
      * @pre The attribute defined must exist on any entities tested against this check.
@@ -19,8 +19,8 @@ export abstract class Check {
      */
     public constructor( protected target: number = 0 ) {
 
-        this.dieBag = new DieBag();
-        this.setCheckDie();
+        this._dieBag = new DieBag();
+        this.SetCheckDie();
     }
 
     /**
@@ -29,9 +29,9 @@ export abstract class Check {
      * @param {TargetModifier} modifier
      * @return { Check }
      */
-    public addModifier( modifier: Modifier ) : Check {
+    public AddModifier( modifier: Modifier ) : Check {
 
-        this.modifiers.push( modifier );
+        this._modifiers.push( modifier );
         return this;
     }
 
@@ -40,9 +40,8 @@ export abstract class Check {
      *
      * @returns {Modifier[]}
      */
-    public getModifiers() : Modifier[] {
-
-        return this.modifiers;
+    public get Modifiers() : Modifier[] {
+        return this._modifiers;
     }
 
     /**
@@ -50,7 +49,7 @@ export abstract class Check {
      *
      * @returns {boolean}
      */
-    public isPass() : boolean {
+    public IsPass() : boolean {
 
         let isPass : boolean = false;
 
@@ -86,9 +85,8 @@ export abstract class Check {
      *
      * @returns {Check}
      */
-    public setTarget( target : number ) : Check {
-        this.target = target;
-        return this;
+    public set Target( target : number ) {
+        this._target = target;
     }
 
     /**
@@ -97,7 +95,7 @@ export abstract class Check {
      * @returns {number}
      */
     public getTarget() : number {
-        return this.target;
+        return this._target;
     }
 
     /**
@@ -106,28 +104,26 @@ export abstract class Check {
      * @param {number} result
      * @returns {Check}
      */
-    public setResult( result : number ) : Check {
+    public set Result( result : number ) {
 
-        this.result = result;
-        return this;
+        this._result = result;
     }
 
     /**
      * Get the current result value on the check
      * @returns {number}
      */
-    public getResult() : number {
+    public get Result(): number {
 
-        return this.result;
+        return this._result;
     }
 
     /**
      * Get the result of dice rolled, without modifiers.
      * @returns {number}
      */
-    public getRawRollResult() : number {
-
-        return this.rawResult;
+    public get RawRollResult() : number {
+        return this._rawResult;
     }
 
     /**
@@ -135,11 +131,11 @@ export abstract class Check {
      *
      * @returns {Check}
      */
-    public roll() : Check {
+    public Roll() : Check {
 
-        this.dieBag.roll();
-        this.rawResult = this.dieBag.getTotal();
-        this.setResult( this.dieBag.getTotal() );
+        this._dieBag.roll();
+        this._rawResult = this._dieBag.Total;
+        this.Result =  this._dieBag.Total;
 
         return this;
     }
@@ -149,9 +145,9 @@ export abstract class Check {
      *
      * @returns {DieBag}
      */
-    public getDieBag() : DieBag {
+    public get DieBag() : DieBag {
 
-        return this.dieBag;
+        return this.DieBag;
     }
 
 
@@ -163,9 +159,9 @@ export abstract class Check {
      *
      * @returns {Check}
      */
-    public addDie( count : number, sides : number ) : Check {
+    public AddDie( count : number, sides : number ) : Check {
 
-        this.getDieBag().add( count, sides );
+        this.DieBag.Add( count, sides );
         return this;
     }
 
@@ -178,9 +174,9 @@ export abstract class Check {
      *
      * @returns {Check}
      */
-    public removeDie( count : number, sides : number ) : Check {
+    public RemoveDie( count : number, sides : number ) : Check {
 
-        this.getDieBag().remove( count, sides );
+        this.DieBag.remove( count, sides );
         return this;
     }
 
@@ -192,14 +188,13 @@ export abstract class Check {
      *
      * @returns {Check}
      */
-    public setTestCondition( operator : string ) : Check {
+    public set TestCondition( operator : string ) : Check {
 
         if ( operator != '>' && operator != '>=' && operator != '<' && operator != '<=' ) {
             throw( 'Invalid success operator provided.  Value values include "<", "<=", ">", ">="');
         }
 
-        this.testCondition = operator;
-        return this;
+        this._testCondition = operator;
     }
 
     /**

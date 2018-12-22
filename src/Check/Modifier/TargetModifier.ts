@@ -2,14 +2,14 @@ import { Modifier } from "./Modifier";
 import { Check } from "../Check";
 export class TargetModifier extends Modifier {
 
-    applyTo( check: Check ): void {
+    ApplyTo( check: Check ): void {
 
-        let sumOfValues = Number( this.sumOfValues() );
+        let sumOfValues = Number( this.SumOfValues() );
 
         check.setTarget( check.getTarget() + sumOfValues );
     }
 
-    public getType(): string {
+    public get Type(): string {
         return 'target';
     }
 }
