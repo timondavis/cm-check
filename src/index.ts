@@ -12,7 +12,7 @@ import { DieBag } from "./Die/DieBag";
 export { CheckExecutor, Check, D20AttributeCheck, SimpleCheck, DieModifier, ResultModifier, TargetModifier, Modifier, Die, DieBag }
 
 module.exports.Check = Check;
-module.exports.CheckExecutor = CheckExecutor.getInstance();
+module.exports.CheckExecutor = CheckExecutor;
 module.exports.D20AttributeCheck = D20AttributeCheck;
 module.exports.SimpleCheck = SimpleCheck;
 module.exports.DieModifier = DieModifier;
