@@ -21,9 +21,3 @@ module.exports.TargetModifier = TargetModifier;
 module.exports.Modifier = Modifier;
 module.exports.Die = Die;
 module.exports.DieBag = DieBag;
-
-
-
-
-
-
