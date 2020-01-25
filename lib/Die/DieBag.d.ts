@@ -102,8 +102,8 @@ export declare class DieBag {
         value: number[];
     };
     static encodeDieString(count: number, sides: number): string;
-    private rollCollection();
-    private refreshDieResults();
-    private strictRemoveBag(bag);
-    private looseRemoveBag(bag);
+    private rollCollection;
+    private refreshDieResults;
+    private strictRemoveBag;
+    private looseRemoveBag;
 }

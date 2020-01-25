@@ -1,4 +1,4 @@
-const d: any = require( 'dice-bag' );
+import {DieRoller} from "./DieRoller";
 
 export class Die {
 
@@ -19,9 +19,8 @@ export class Die {
      */
     public roll() : Die {
 
-        if ( ! this.isLocked() ) {
-
-            this.value = d( 1, this.sides );
+        if (!this.isLocked()) {
+            this.value = DieRoller.roll( 1, this.sides );
         }
 
         return this;
