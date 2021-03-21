@@ -23,11 +23,12 @@
   "devDependencies": {
     "concurrently": "3.5.1",
     "nodemon": "1.14.11",
-    "ts-node": "4.1.0"
+    "ts-node": "4.1.0",
+    "@types/node": "^14.14.34"
   },
   "scripts": {
     "start": "concurrently \"npm run build:live\" \"npm run build:disk\"",
-    "build:live": "nodemon --exec ./node_modules/.bin/ts-node ./src/index.ts",
+    "build:live": "nodemon --exec ts-node ./src/index.ts",
     "build:disk": "exec tsc -w",
     "test": "mocha -r ts-node/register ./src/Test/**/*.ts"
   }
