@@ -11,13 +11,17 @@ import { DieBag } from "./Die/DieBag";
 
 export { CheckExecutor, Check, D20AttributeCheck, SimpleCheck, DieModifier, ResultModifier, TargetModifier, Modifier, Die, DieBag }
 
-module.exports.Check = Check;
-module.exports.CheckExecutor = CheckExecutor;
-module.exports.D20AttributeCheck = D20AttributeCheck;
-module.exports.SimpleCheck = SimpleCheck;
-module.exports.DieModifier = DieModifier;
-module.exports.ResultModifier = ResultModifier;
-module.exports.TargetModifier = TargetModifier;
-module.exports.Modifier = Modifier;
-module.exports.Die = Die;
-module.exports.DieBag = DieBag;
+let ex = {
+    Check: Check,
+    CheckExecutor: CheckExecutor,
+    D20AttributeCheck: D20AttributeCheck,
+    SimpleCheck: SimpleCheck,
+    DieModifier: DieModifier,
+    ResultModifier: ResultModifier,
+    TargetModifier: TargetModifier,
+    Modifier: Modifier,
+    Die: Die,
+    DieBag: DieBag
+}
+
+module.exports = ex;
