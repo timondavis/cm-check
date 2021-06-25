@@ -283,4 +283,51 @@ describe( 'DieBag', () => {
         expect( () => DieBag.decodeDieString( '10d-1' ) ).to.throw;
     });
 
+    it ( 'allows manipulation of the die bag using encoded die strings', () => {
+
+        for (let pass = 0 ; pass < 1000 ; pass++) {
+
+            bag = new DieBag();
+            let sidesA = TestCore.randomInt(19) + 1;
+            let sidesB = TestCore.randomInt(19) + 1;
+
+            let attempts = 0;
+            while ( sidesA === sidesB && attempts <= 1000 ) {
+                sidesB = TestCore.randomInt(19) + 1;
+                attempts++;
+            }
+
+            if (attempts === 1000) {
+                throw "Randomization is broken in DieBag Test";
+            }
+
+            let amountA = TestCore.randomInt(19) + 1;
+            let amountB = TestCore.randomInt(19) + 1;
+
+            let amountAdjustmentA = TestCore.randomInt(amountA) - 1;
+            let amountAdjustmentB = TestCore.randomInt(amountB) - 1;
+
+            amountAdjustmentA = (amountAdjustmentA > 0) ? amountAdjustmentA : 1;
+            amountAdjustmentB = (amountAdjustmentB > 0) ? amountAdjustmentB : 1;
+
+            bag.applyDieString(amountA + 'd' + sidesA);
+            bag.applyDieString(amountB + 'd' + sidesB);
+
+            bag.applyDieString('-' + amountAdjustmentA + 'd' + sidesA);
+            bag.applyDieString('-' + amountAdjustmentB + 'd' + sidesB);
+
+            expect(bag.getDieWithSides(sidesA).length).to.be.equal(amountA - amountAdjustmentA);
+            expect(bag.getDieWithSides(sidesB).length).to.be.equal(amountB - amountAdjustmentB);
+
+            let addAmountA = TestCore.randomInt(10);
+            let addAmountB = TestCore.randomInt(10);
+
+            bag.applyDieString(addAmountA + 'd' + sidesA);
+            bag.applyDieString(addAmountB + 'd' + sidesB);
+
+            expect(bag.getDieWithSides(sidesA).length).to.be.equal(amountA + addAmountA - amountAdjustmentA);
+            expect(bag.getDieWithSides(sidesB).length).to.be.equal(amountB + addAmountB - amountAdjustmentB);
+        }
+    });
+
 });

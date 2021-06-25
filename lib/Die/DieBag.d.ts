@@ -6,7 +6,7 @@ export declare class DieBag {
     protected rollResults: {
         [key: string]: number;
     };
-    get dieMap(): {
+    readonly dieMap: {
         [key: string]: Die[];
     };
     /**
@@ -19,6 +19,13 @@ export declare class DieBag {
      * @return {DieBag}
      */
     add(count: number, sides: number, value?: number): DieBag;
+    /**
+     * Add die to bag with string instead of broken down value.
+     *
+     * @param dieString {string}
+     * Uses local 'die-string' paradigm.  classic xDy (x = die count, y = sides), but putting - in front will REMOVE die if present...
+     */
+    applyDieString(dieString: string): void;
     /**
      * Add the contents of a die bag to this bag
      * @param {DieBag} bag

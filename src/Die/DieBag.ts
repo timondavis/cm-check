@@ -40,6 +40,30 @@ export class DieBag {
     }
 
     /**
+     * Add die to bag with string instead of broken down value.
+     *
+     * @param dieString {string}
+     * Uses local 'die-string' paradigm.  classic xDy (x = die count, y = sides), but putting - in front will REMOVE die if present...
+     */
+    public applyDieString(dieString: string) {
+        const info = DieBag.decodeDieString(dieString);
+
+        switch (info.directive) {
+            case ('add'): {
+                this.add(info.value[0], info.value[1]);
+                break;
+            }
+            case ('remove'): {
+                this.remove(info.value[0], info.value[1]);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
+    /**
      * Add the contents of a die bag to this bag
      * @param {DieBag} bag
      *
