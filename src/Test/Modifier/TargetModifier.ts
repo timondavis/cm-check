@@ -4,6 +4,7 @@ import { CheckExecutor } from "../../Check/CheckExecutor";
 import { Check } from "../../Check/Check";
 import { TestCore } from "../TestCore";
 import { TargetModifier } from "../../Check/Modifier/TargetModifier";
+import {ResultModifier} from "../../Check/Modifier/ResultModifier";
 
 describe( 'TargetModifier', () => {
 
@@ -75,5 +76,20 @@ describe( 'TargetModifier', () => {
 
         let modifier = new TargetModifier( 'Name', TestCore.randomInt() );
         expect( modifier.getType() ).to.be.equal( 'target' );
+    });
+
+    it ('should be serializable and deserializable', () => {
+
+        let value = TestCore.randomInt();
+
+        let m = new TargetModifier('Name', value);
+        let serializedM = TargetModifier.serialize(m);
+
+        let ok = new TargetModifier();
+        let deserializedM = ok.deserialize(serializedM) as TargetModifier;
+
+        expect(deserializedM.getType()).to.be.equal('target');
+        expect(deserializedM.getName()).to.be.equal('Name');
+        expect(deserializedM.getValue()).to.be.equal(value);
     });
 });

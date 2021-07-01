@@ -3,7 +3,7 @@ import { Check } from "../Check";
 export abstract class Modifier {
 
     abstract applyTo( check: Check ): void;
-
+    abstract deserialize( serialized: string ) : Modifier;
     abstract getType(): string;
 
     protected phase: string = 'after';
@@ -98,5 +98,12 @@ export abstract class Modifier {
         return ( isNaN( Number( this.value ) ) ? false : Number( this.value ) );
     }
 
+    public static serialize(modifier: Modifier) : string {
+        let obj = {
+            name: modifier.getName(),
+            value: modifier.getValue(),
+            phase: modifier.getPhase()
+        };
+        return JSON.stringify(obj);
+    }
 }
-

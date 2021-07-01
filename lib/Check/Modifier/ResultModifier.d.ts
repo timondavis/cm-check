@@ -3,4 +3,5 @@ import { Check } from "../Check";
 export declare class ResultModifier extends Modifier {
     applyTo(check: Check): void;
     getType(): string;
+    deserialize(serialized: string): ResultModifier;
 }

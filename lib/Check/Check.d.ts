@@ -126,7 +126,10 @@ export declare abstract class Check {
      * Set a new DieBag on this check.
      */
     protected abstract setCheckDie(): void;
-    toString(): string;
+    /**
+     * Serialize the contents (not state!) of a check.
+     */
+    static serialize(check: Check): void;
 }
 export declare class CheckReport {
     isPass: boolean;

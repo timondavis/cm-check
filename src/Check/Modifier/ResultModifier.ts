@@ -10,4 +10,12 @@ export class ResultModifier extends Modifier {
     public getType(): string {
         return 'result';
     }
+
+    public deserialize(serialized: string) : ResultModifier {
+        let d = JSON.parse(serialized);
+        let dm = new ResultModifier(d.name, d.value);
+        dm.setPhase(d.phase);
+
+        return dm;
+    }
 }

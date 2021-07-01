@@ -14,6 +14,7 @@ describe( 'Modifier', () => {
     class MyModifier extends Modifier {
         applyTo( check: Check ): void { }
         getType(): string { return 'MyModifier'; }
+        deserialize(): MyModifier { return null };
     }
 
     it ( 'is is applied to the "after" phase of the check, unless modified.  It should report its phase.', () => {
@@ -47,4 +48,5 @@ describe( 'Modifier', () => {
         m.setName( 'New Name' );
         expect( m.getName() ).to.be.equal( 'New Name' );
     });
+
 });

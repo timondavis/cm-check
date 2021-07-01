@@ -3,6 +3,15 @@ import { Check } from "../Check";
 import { DieBag } from "../../Die/DieBag";
 export class DieModifier extends Modifier {
 
+    public constructor( protected name: string = 'Die Modifier', protected value: string | number | string[] | number[] = [] ) {
+        super( name, value);
+        this.setPhase( 'before' );
+    }
+
+    getType(): string {
+        return "die";
+    }
+
     applyTo( check: Check ): void {
 
         let dieDirective: { directive: string, value: number[] };
@@ -22,17 +31,15 @@ export class DieModifier extends Modifier {
         }
     }
 
-    public constructor( protected name: string = 'Die Modifier', protected value: string | number | string[] | number[] = [] ) {
-        super( name, value );
-        this.setPhase( 'before' );
-    }
+    public deserialize(serialized: string) : DieModifier {
+        let d = JSON.parse(serialized);
+        let dm = new DieModifier(d.name, d.value);
+        dm.setPhase(d.phase);
 
-    public getType(): string {
-        return 'die';
+        return dm;
     }
 
     protected static processDieDirectiveOn( check: Check, dieDirective : { directive: string, value: number[] } ) {
-
         if ( dieDirective.directive === 'add' ) {
             check.getDieBag().add( dieDirective.value[0], dieDirective.value[1] );
         }
@@ -40,4 +47,6 @@ export class DieModifier extends Modifier {
             check.getDieBag().remove( dieDirective.value[0], dieDirective.value[1] );
         }
     }
+
+
 }

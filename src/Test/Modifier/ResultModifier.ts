@@ -1,9 +1,11 @@
+
 import 'mocha';
 import { expect } from "chai";
 import { CheckExecutor } from "../../Check/CheckExecutor";
 import { Check } from "../../Check/Check";
 import { TestCore } from "../TestCore";
 import { ResultModifier } from "../../Check/Modifier/ResultModifier";
+import {DieModifier} from "../../Check/Modifier/DieModifier";
 
 describe( 'ResultModifier', () => {
 
@@ -72,5 +74,20 @@ describe( 'ResultModifier', () => {
 
         let modifier = new ResultModifier( 'Name', TestCore.randomInt() );
         expect( modifier.getType() ).to.be.equal( 'result' );
+    });
+
+    it ('should be serializable and deserializable', () => {
+
+        let value = TestCore.randomInt();
+
+        let m = new ResultModifier('Name', value);
+        let serializedM = ResultModifier.serialize(m);
+
+        let ok = new ResultModifier();
+        let deserializedM = ok.deserialize(serializedM) as ResultModifier;
+
+        expect(deserializedM.getType()).to.be.equal('result');
+        expect(deserializedM.getName()).to.be.equal('Name');
+        expect(deserializedM.getValue()).to.be.equal(value);
     });
 });

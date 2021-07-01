@@ -245,12 +245,13 @@ export abstract class Check {
      */
     protected abstract setCheckDie() : void;
 
-    public toString() : string {
-        let str = '';
+    /**
+     * Serialize the contents (not state!) of a check.
+     */
+    public static serialize(check: Check) {
+        let dieBag = DieBag.serialize(check.getDieBag());
+        let testCondition = check.getTestCondition();
 
-        this.dieBag.dieMap
-
-        return null;
     }
 
 }

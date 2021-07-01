@@ -157,4 +157,20 @@ describe( 'DieModifier', () => {
         let modifier = new DieModifier( 'Name', TestCore.randomInt() );
         expect( modifier.getType() ).to.be.equal( 'die' );
     });
+
+    it ('should be serializable and deserializable', () => {
+
+        let value = TestCore.randomInt();
+
+        let m = new DieModifier('Name', value);
+        let serializedM = DieModifier.serialize(m);
+
+        let ok = new DieModifier();
+        let deserializedM = ok.deserialize(serializedM) as DieModifier;
+
+        expect(deserializedM.getType()).to.be.equal('die');
+        expect(deserializedM.getPhase()).to.be.equal('before');
+        expect(deserializedM.getName()).to.be.equal('Name');
+        expect(deserializedM.getValue()).to.be.equal(value);
+    });
 });

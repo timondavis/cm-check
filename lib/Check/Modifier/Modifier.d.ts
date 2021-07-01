@@ -3,6 +3,7 @@ export declare abstract class Modifier {
     protected name: string;
     protected value: string | number | string[] | number[];
     abstract applyTo(check: Check): void;
+    abstract deserialize(serialized: string): Modifier;
     abstract getType(): string;
     protected phase: string;
     constructor(name?: string, value?: string | number | string[] | number[]);
@@ -51,4 +52,5 @@ export declare abstract class Modifier {
      * @returns {number | boolean} Will return false if NaN is found in value array or as value.
      */
     protected sumOfValues(): number | boolean;
+    static serialize(modifier: Modifier): string;
 }

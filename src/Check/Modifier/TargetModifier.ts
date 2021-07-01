@@ -12,4 +12,12 @@ export class TargetModifier extends Modifier {
     public getType(): string {
         return 'target';
     }
+
+    public deserialize(serialized: string) : TargetModifier {
+        let d = JSON.parse(serialized);
+        let dm = new TargetModifier(d.name, d.value);
+        dm.setPhase(d.phase);
+
+        return dm;
+    }
 }
