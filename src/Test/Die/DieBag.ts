@@ -330,4 +330,34 @@ describe( 'DieBag', () => {
         }
     });
 
+    it ( 'can be serialized and deserialized (contents only, not state)', () => {
+        for (let i = 0 ; i < 1000 ; i++ ) {
+            let freshBag = new DieBag();
+            let sidesCount = new Map<number, number>();
+            let addSize = TestCore.randomInt(100);
+
+            for (let i = 0 ; i < addSize ; i++) {
+                let sides = TestCore.randomInt(20);
+                let count = TestCore.randomInt(100);
+                if (sidesCount.has(sides)) {
+                    sidesCount.set(sides, sidesCount.get(sides) + count);
+                } else {
+                    sidesCount.set(sides, count);
+                }
+
+                freshBag.add(count, sides);
+            }
+
+            let serializedBagString = DieBag.serialize(freshBag);
+            let rehydratedBag =  DieBag.deserialize(serializedBagString);
+
+            Object.keys(rehydratedBag.dieMap).forEach((key) => {
+                expect(rehydratedBag.dieMap[key].length).to.be.equal(sidesCount.get(Number.parseInt(key)));
+                sidesCount.delete(Number.parseInt(key));
+            });
+
+            expect(Object.keys(sidesCount).length).to.be.equal(0);
+        }
+    });
+
 });

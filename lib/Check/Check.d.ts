@@ -126,6 +126,7 @@ export declare abstract class Check {
      * Set a new DieBag on this check.
      */
     protected abstract setCheckDie(): void;
+    toString(): string;
 }
 export declare class CheckReport {
     isPass: boolean;

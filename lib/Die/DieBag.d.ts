@@ -104,6 +104,14 @@ export declare class DieBag {
      * @returns {Die[]}
      */
     getDieWithSides(sides: number | string): Die[];
+    /**
+     * Serialize the die bag (not its outcome, just its contents)
+     */
+    static serialize(dieBag: DieBag): string;
+    /**
+     * Generate a DieBag from a serialized string representing a Diebag
+     */
+    static deserialize(serialized: string): DieBag;
     static decodeDieString(dieCode: string): {
         directive: string;
         value: number[];

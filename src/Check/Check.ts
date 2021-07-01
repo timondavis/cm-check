@@ -244,6 +244,15 @@ export abstract class Check {
      * Set a new DieBag on this check.
      */
     protected abstract setCheckDie() : void;
+
+    public toString() : string {
+        let str = '';
+
+        this.dieBag.dieMap
+
+        return null;
+    }
+
 }
 
 export class CheckReport {

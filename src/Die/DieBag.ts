@@ -225,6 +225,41 @@ export class DieBag {
         return this.dieMap[sides];
     }
 
+    /**
+     * Serialize the die bag (not its outcome, just its contents)
+     */
+    public static serialize(dieBag: DieBag): string {
+
+        let arr = [];
+
+        Object.keys(dieBag.dieMap).forEach((key) => {
+            if (dieBag.dieMap[key].length > 0) {
+                arr.push(this.encodeDieString(dieBag.dieMap[key].length, Number.parseInt(key)));
+            }
+        });
+
+        return JSON.stringify(arr);
+    }
+
+    /**
+     * Generate a DieBag from a serialized string representing a Diebag
+     */
+    public static deserialize(serialized: string) {
+        let dieMap = JSON.parse(serialized);
+
+        let d = new DieBag();
+
+        let decoded = null;
+        for (let i = 0 ; i < dieMap.length ; i++) {
+            decoded = this.decodeDieString(dieMap[i]);
+
+            d.add(decoded.value[0], decoded.value[1]);
+        }
+
+        return d;
+    }
+
+
     public static decodeDieString( dieCode : string ) : { directive: string, value: number[] } {
 
         let dieDefinition : string[];
@@ -236,7 +271,6 @@ export class DieBag {
             directive = 'remove';
             dieCode = dieCode.substr( 1 );
         }
-
 
         dieDefinition = dieCode.split( 'd', 2 );
 
@@ -336,6 +370,5 @@ export class DieBag {
 
             self.remove( groupSize, Number(groupIndex) );
         });
-
     }
 }
