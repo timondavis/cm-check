@@ -24,6 +24,10 @@ describe( 'CheckExecutor', () => {
         }
         getType(): string { return 'MyResultModifier'; }
         applyTo( check: Check ): void { check.setResult( check.getResult() + Number( this.getValue() )); }
+
+        deserialize(serialized: string): Modifier {
+            return undefined;
+        }
     }
 
     class MyTargetModifier extends Modifier {
@@ -35,6 +39,10 @@ describe( 'CheckExecutor', () => {
 
         getType() : string { return 'MyTargetModifier'; }
         applyTo( check: Check ) : void { check.setTarget( check.getTarget() + Number( this.getValue() )); }
+
+        deserialize(serialized: string): Modifier {
+            return undefined;
+        }
     }
 
 

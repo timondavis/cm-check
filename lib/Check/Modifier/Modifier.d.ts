@@ -52,5 +52,5 @@ export declare abstract class Modifier {
      * @returns {number | boolean} Will return false if NaN is found in value array or as value.
      */
     protected sumOfValues(): number | boolean;
-    static serialize(modifier: Modifier): string;
+    static serialize(modifier: Modifier | Modifier[]): string;
 }

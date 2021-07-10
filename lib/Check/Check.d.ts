@@ -1,6 +1,6 @@
 import { DieBag } from "../Die/DieBag";
 import { Modifier } from "./Modifier/Modifier";
-export declare abstract class Check {
+export declare class Check {
     protected target: number;
     protected modifiers: Modifier[];
     protected rawResult: number;
@@ -121,15 +121,16 @@ export declare abstract class Check {
      *
      * @returns {string}
      */
-    abstract getType(): string;
+    getType(): string;
     /**
      * Set a new DieBag on this check.
      */
-    protected abstract setCheckDie(): void;
+    protected setCheckDie(): void;
     /**
      * Serialize the contents (not state!) of a check.
      */
-    static serialize(check: Check): void;
+    static serialize(check: Check): string;
+    static deserialize(serializedCheck: string): Check;
 }
 export declare class CheckReport {
     isPass: boolean;

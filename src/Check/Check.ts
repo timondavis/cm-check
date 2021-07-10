@@ -1,7 +1,10 @@
 import { DieBag } from "../Die/DieBag";
 import { Modifier } from "./Modifier/Modifier";
+import { DieModifier} from "./Modifier/DieModifier";
+import {ResultModifier} from "./Modifier/ResultModifier";
+import {TargetModifier} from "./Modifier/TargetModifier";
 
-export abstract class Check {
+export class Check {
 
     protected modifiers : Modifier[] = [];
 
@@ -238,22 +241,78 @@ export abstract class Check {
      *
      * @returns {string}
      */
-    public abstract getType() : string;
+    public getType() : string { return 'check';}
 
     /**
      * Set a new DieBag on this check.
      */
-    protected abstract setCheckDie() : void;
+    protected setCheckDie() : void {};
 
     /**
      * Serialize the contents (not state!) of a check.
      */
-    public static serialize(check: Check) {
-        let dieBag = DieBag.serialize(check.getDieBag());
+    public static serialize(check: Check) : string {
+        let dieBag = check.getDieBag();
         let testCondition = check.getTestCondition();
+        let modifiers = check.getModifiers();
+        let target = check.target;
+        let type = check.getType();
 
+        return JSON.stringify({
+            dieBag: DieBag.serialize(dieBag),
+            testCondition: testCondition,
+            modifiers: Modifier.serialize(modifiers),
+            target: target,
+            type: type
+        });
     }
 
+    public static deserialize(serializedCheck : string) : Check {
+        let obj = JSON.parse(serializedCheck);
+        let dieBag: DieBag = DieBag.deserialize(obj.dieBag);
+        let testCondition: string = obj.testCondition;
+        let strModifiers: any[] = JSON.parse(obj.modifiers);
+        let modifiers: Modifier[] = [];
+        let target = obj.target;
+
+        strModifiers.forEach((objM) => {
+            switch(objM.type) {
+                case('die'): {
+                    let dm = new DieModifier();
+                    dm.setName(objM.name);
+                    dm.setValue(objM.value);
+                    dm.setPhase(objM.phase);
+                    modifiers.push(objM);
+                    break;
+                }
+                case('result'): {
+                    let rm = new ResultModifier();
+                    rm.setName(objM.name);
+                    rm.setValue(objM.value);
+                    rm.setPhase(objM.phase);
+                    modifiers.push(objM);
+                    break;
+                }
+                case('target'): {
+                    let tm = new TargetModifier();
+                    tm.setName(objM.name);
+                    tm.setValue(objM.value);
+                    tm.setPhase(objM.phase);
+                    modifiers.push(objM);
+                    break;
+                }
+                default: break;
+            }
+        });
+
+        let c = new Check();
+        c.dieBag = dieBag;
+        c.testCondition = testCondition;
+        c.modifiers = modifiers;
+        c.target = target;
+
+        return c;
+    }
 }
 
 export class CheckReport {

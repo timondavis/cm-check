@@ -3,6 +3,8 @@ import 'mocha';
 import { Check, CheckReport } from "../../Check/Check";
 import { ResultModifier } from "../../Check/Modifier/ResultModifier";
 import { TestCore } from "../TestCore";
+import {DieModifier} from "../../Check/Modifier/DieModifier";
+import {TargetModifier} from "../../Check/Modifier/TargetModifier";
 
 describe( 'Check', () => {
 
@@ -13,7 +15,7 @@ describe( 'Check', () => {
         protected setCheckDie(): void {}
     }
 
-    it( 'should allow for modifers to be added', () => {
+    it( 'should allow for modifiers to be added', () => {
 
         let sides = TestCore.randomInt();
         let dieValue = TestCore.randomInt( sides );
@@ -216,4 +218,100 @@ describe( 'Check', () => {
         expect( c.getDieBag().getDieWithSides( sides ) ).to.have.length( bigNumber - smallNumber );
     });
 
+    it ('can be serialized and deserialized', () => {
+        for (let cycle = 0 ; cycle < 500 ; cycle++) {
+            let sidesCount = new Map<number, number>();
+            let targetNumber = TestCore.randomInt(10000);
+            let testCondition = '>';
+            let check = new Check();
+
+            check.setTarget(targetNumber);
+            check.setTestCondition(testCondition);
+
+            for (let i = 0 ; i < TestCore.randomInt(10) + 10 ; i++) {
+                let sides = TestCore.randomInt(100);
+                let count = TestCore.randomInt(100);
+
+                if (sidesCount.has(sides)) {
+                    sidesCount.set(sides, sidesCount.get(sides) + count);
+                } else {
+                    sidesCount.set(sides, count);
+                }
+
+                check.addDie(sides, count);
+            }
+
+            let dieModifiers = [];
+            for (let i = 0 ; i < TestCore.randomInt(3) ; i++) {
+                let m = new DieModifier();
+                m.setPhase('dm');
+                m.setName('dm-' + i.toString());
+                m.setValue(TestCore.randomInt(10));
+                check.addModifier(m);
+            }
+
+            let resultModifiers = [];
+            for (let i = 0 ; i < TestCore.randomInt(3) ; i++) {
+                let m = new ResultModifier;
+                m.setPhase('rm');
+                m.setName('rm-' + i.toString());
+                m.setValue(TestCore.randomInt(10));
+                check.addModifier(m);
+            }
+
+            let targetModifiers = [];
+            for (let i = 0 ; i < TestCore.randomInt(3) ; i++) {
+                let m = new TargetModifier();
+                m.setPhase('tm');
+                m.setName('tm-' + i.toString());
+                m.setValue(TestCore.randomInt(10));
+                check.addModifier(m);
+            }
+
+            let serializedCheck = Check.serialize(check);
+            let unserializedCheck = Check.deserialize(serializedCheck);
+
+            let usDieBag = unserializedCheck.getDieBag();
+            let usTargetNumber = unserializedCheck.getTarget();
+            let usTestCondition = unserializedCheck.getTestCondition();
+            let usModifiers = unserializedCheck.getModifiers();
+
+            Object.keys(usDieBag).forEach((sides) => {
+                expect(sidesCount.get(Number.parseInt(sides))).to.be.equal(usDieBag[sides].length);
+                sidesCount.delete(Number.parseInt(sides));
+            });
+
+            expect(usTargetNumber).to.be.equal(targetNumber);
+            expect(usTestCondition).to.be.equal(testCondition);
+
+            usModifiers.forEach((modifier) => {
+                switch(modifier.getType()) {
+                    case('die'): {
+                        let i = dieModifiers.find(p => p.getName() == modifier.getName());
+                        expect(i.getName()).to.be.equal('dm-' + 1);
+                        expect(i.getValue()).to.be.equal(dieModifiers[i]);
+                        expect(i.getPhase()).to.be.equal('dm');
+                        break;
+                    }
+                    case('target'): {
+                        let i = targetModifiers.find(p => p.getName() == modifier.getName());
+                        expect(i.getName()).to.be.equal('tm-' + 1);
+                        expect(i.getValue()).to.be.equal(dieModifiers[i]);
+                        expect(i.getPhase()).to.be.equal('tm');
+                        break;
+                    }
+                    case('result'): {
+                        let i = resultModifiers.find(p => p.getName() == modifier.getName());
+                        expect(i.getName()).to.be.equal('km-' + 1);
+                        expect(i.getValue()).to.be.equal(dieModifiers[i]);
+                        expect(i.getPhase()).to.be.equal('rm');
+                        break;
+                    }
+                    default:
+                        throw "invalid status";
+                        break;
+                }
+            })
+        }
+    })
 });

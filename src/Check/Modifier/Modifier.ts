@@ -98,12 +98,28 @@ export abstract class Modifier {
         return ( isNaN( Number( this.value ) ) ? false : Number( this.value ) );
     }
 
-    public static serialize(modifier: Modifier) : string {
-        let obj = {
-            name: modifier.getName(),
-            value: modifier.getValue(),
-            phase: modifier.getPhase()
-        };
-        return JSON.stringify(obj);
+    public static serialize(modifier: Modifier | Modifier[]) : string {
+
+        if (Array.isArray(modifier)) {
+            let arr = [];
+
+            modifier.forEach((m) => {
+                arr.push({
+                    name: m.getName(),
+                    value: m.getValue(),
+                    phase: m.getPhase()
+                })
+            });
+
+            return JSON.stringify(arr);
+
+        } else {
+            let obj = {
+                name: modifier.getName(),
+                value: modifier.getValue(),
+                phase: modifier.getPhase()
+            };
+            return JSON.stringify(obj);
+        }
     }
 }
